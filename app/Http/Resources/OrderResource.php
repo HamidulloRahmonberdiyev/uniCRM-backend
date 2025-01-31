@@ -24,6 +24,7 @@ class OrderResource extends JsonResource
             'note' => $this->note,
             'location' => $this->location,
             'status' => (bool) $this->status,
+            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
         ];
     }
 }

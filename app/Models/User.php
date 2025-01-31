@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
+    const ACTIVE = 1;
+    const DEACTIVE = 0;
+
     protected $fillable = [
         'name',
         'email',

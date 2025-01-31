@@ -11,12 +11,12 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'customer' => new CustomerResource($this->whenLoaded('customer')),
-            'user' => new UserResource($this->whenLoaded('user')),
-            'company' => new CompanyResource($this->whenLoaded('company')),
-            'city' => new CityResource($this->whenLoaded('city')),
-            'district' => new DistrictResource($this->whenLoaded('district')),
-            'neighborhood' => new NeighborhoodResource($this->whenLoaded('neighborhood')),
+            'customer' => new CustomerResource($this->customer),
+            'user' => new UserResource($this->user),
+            'company' => new CompanyResource($this->company),
+            'city' => new CityResource($this->city),
+            'district' => new DistrictResource($this->district),
+            'neighborhood' => new NeighborhoodResource($this->neighborhood),
             'quantity' => $this->quantity,
             'sum' => $this->sum,
             'date' => $this->date->format('Y-m-d'),

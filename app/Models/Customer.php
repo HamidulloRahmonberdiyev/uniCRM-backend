@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Customer extends Model
 {
+    const ACTIVE = 1;
+    const DEACTIVE = 0;
+
     protected $fillable = [
         'user_id',
         'company_id',

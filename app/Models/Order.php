@@ -9,7 +9,7 @@ class Order extends Model
 {
     const ACTIVE = 1;
     const CANCEL = 0;
-    const DONE = -1;
+    const DONE = 2;
 
     protected $fillable = [
         'customer_id',

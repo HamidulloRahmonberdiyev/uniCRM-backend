@@ -12,10 +12,9 @@ class CustomerDetailResource extends JsonResource
         return [
             'id' => $this->id,
             'customer_id' => $this->customer_id,
-            'region_id' => $this->region_id,
-            'city_id' => $this->city_id,
-            'district_id' => $this->district_id,
-            'neighborhood_id' => $this->neighborhood_id,
+            'city' => new CityResource($this->whenLoaded('city')),
+            'district' => new DistrictResource($this->whenLoaded('district')),
+            'neighborhood' => new NeighborhoodResource($this->whenLoaded('neighborhood')),
             'home' => $this->home,
         ];
     }

@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class District extends Model
 {
+    const ACTIVE = 1;
+    const DEACTIVE = 0;
+
     protected $fillable = [
         'name',
         'status',

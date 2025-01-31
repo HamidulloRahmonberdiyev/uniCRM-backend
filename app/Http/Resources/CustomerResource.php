@@ -11,7 +11,7 @@ class CustomerResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'user' => new UserResource($this->whenLoaded('user')),
+            'user' => new UserResource($this->user),
             'company_id' => $this->company_id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
@@ -20,7 +20,7 @@ class CustomerResource extends JsonResource
             'phone' => $this->phone,
             'phone2' => $this->phone2,
             'status' => $this->status,
-            'customer_details' => CustomerDetailResource::collection($this->whenLoaded('customerDetails')),
+            'customer_details' => CustomerDetailResource::collection($this->customerDetails),
         ];
     }
 }

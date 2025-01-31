@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
+use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
 use App\Traits\ApiJsonResponceTrait;
 use Illuminate\Http\Request;
@@ -17,7 +18,10 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         $customers = Customer::paginate($request->input('per_page', 20));
-        return $this->successResponse($customers, 'Customers retrieved successfully');
+        return $this->successResponse(
+            CustomerResource::collection($customers),
+            'Customers retrieved successfully'
+        );
     }
 
     public function store(StoreCustomerRequest $request)

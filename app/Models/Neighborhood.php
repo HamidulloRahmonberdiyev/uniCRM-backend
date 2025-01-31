@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Neighborhood extends Model
 {
+    const ACTIVE = 1;
+    const DEACTIVE = 0;
+
     protected $fillable = [
         'city_id',
         'district_id',

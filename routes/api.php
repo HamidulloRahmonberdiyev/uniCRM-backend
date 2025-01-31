@@ -20,8 +20,11 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('customers', [CustomerController::class, 'index']);
-    Route::post('customers/{customer}', [CustomerController::class, 'show']);
+
+    Route::get('customers/search', [CustomerController::class, 'search']);
+
+    Route::get('customers', [CustomerController::class, 'index']);
+    Route::get('customers/{customer}', [CustomerController::class, 'show']);
     Route::post('customers/store', [CustomerController::class, 'store']);
     Route::put('customers/update/{customer}', [CustomerController::class, 'update']);
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);

@@ -17,11 +17,16 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        $customers = Customer::paginate(20);
-        return $this->successResponse(
-            CustomerResource::collection($customers),
-            'Customers retrieved successfully'
-        );
+        $customers = Customer::paginate($request->input('per_page', 20));
+
+        return $this->successResponse([
+            'data' => CustomerResource::collection($customers),
+            'meta' => [
+                'total_pages' => $customers->lastPage(),
+                'current_page' => $customers->currentPage(),
+                'total_items' => $customers->total()
+            ]
+        ], 'Customers retrieved successfully');
     }
 
     public function store(StoreCustomerRequest $request)

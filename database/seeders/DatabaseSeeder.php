@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
-            // CustomerSeeder::class,
-            RegionSeeder::class,
+            CustomerSeeder::class,
+            // RegionSeeder::class,
         ]);
     }
 }

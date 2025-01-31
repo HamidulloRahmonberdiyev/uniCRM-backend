@@ -12,8 +12,8 @@ class OrderService
     {
         return Order::query()
             ->when($request->has('status'), fn($q) => $q->where('status', $request->status))
-            ->latest()
-            ->paginate(10);
+            ->latest('updated_at')
+            ->paginate(20);
     }
 
     public function createOrder(array $data): Order

@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Order extends Model
 {
+    const ACTIVE = 1;
+    const CANCEL = 0;
+    const DONE = -1;
+
     protected $fillable = [
         'customer_id',
         'user_id',

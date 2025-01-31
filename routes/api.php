@@ -29,5 +29,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('customers/update/{customer}', [CustomerController::class, 'update']);
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
 
+    Route::get('orders', [OrderController::class, 'index']);
     Route::post('orders/store', [OrderController::class, 'store']);
 });

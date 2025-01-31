@@ -17,7 +17,7 @@ class CustomerController extends Controller
 
     public function index(Request $request)
     {
-        $customers = Customer::paginate($request->input('per_page', 20));
+        $customers = Customer::paginate(20);
         return $this->successResponse(
             CustomerResource::collection($customers),
             'Customers retrieved successfully'

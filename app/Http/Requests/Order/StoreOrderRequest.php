@@ -26,7 +26,7 @@ class StoreOrderRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'note' => 'nullable|string|max:500',
             'location' => 'nullable|string',
-            'status' => 'required|boolean',
+            'status' => 'nullable|boolean',
         ];
     }
 }

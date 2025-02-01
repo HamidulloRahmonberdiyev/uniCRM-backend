@@ -224,7 +224,7 @@ class CustomerSeeder extends Seeder
 
     public function run(): void
     {
-        for ($i = 0; $i < 200; $i++) {
+        for ($i = 0; $i < 300; $i++) {
             $gender = fake()->randomElement(['male', 'female']);
 
             $firstName = $this->getUzbekFirstName($gender);

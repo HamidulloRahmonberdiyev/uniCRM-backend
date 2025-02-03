@@ -39,8 +39,8 @@ class CustomerController extends Controller
 
     public function store(StoreCustomerRequest $request)
     {
-        $customer = Customer::create($request->validated());
-        return $this->successResponse($customer, 'Customer created successfully', 201);
+        $customer = $this->customerService->createCustomer($request->validated());
+        return new CustomerResource($customer);
     }
 
     public function show(Customer $customer)

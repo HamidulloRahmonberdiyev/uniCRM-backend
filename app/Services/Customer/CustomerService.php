@@ -18,7 +18,7 @@ class CustomerService
 
     public function createCustomer(array $data): Order
     {
-        return Order::create([
+        return Customer::create([
             'customer_id' => $data['customer_id'],
             'user_id' => Auth::id(),
             'company_id' => 1,

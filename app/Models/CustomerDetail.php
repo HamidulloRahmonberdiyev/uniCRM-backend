@@ -32,4 +32,24 @@ class CustomerDetail extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function region(): BelongsTo
+    {
+        return $this->belongsTo(Region::class);
+    }
+
+    public function city(): BelongsTo
+    {
+        return $this->belongsTo(City::class);
+    }
+
+    public function district(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
+
+    public function neighborhood(): BelongsTo
+    {
+        return $this->belongsTo(District::class);
+    }
 }

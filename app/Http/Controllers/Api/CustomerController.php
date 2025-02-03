@@ -104,6 +104,10 @@ class CustomerController extends Controller
             ]
         );
 
-        return $this->successResponse($customers->limit(10)->get());
+        $customers = $customers->limit(10)->get()->map(function ($customer) {
+            return new CustomerResource($customer);
+        });
+
+        return $this->successResponse($customers);
     }
 }

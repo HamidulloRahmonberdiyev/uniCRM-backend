@@ -18,21 +18,7 @@ class CustomerService
 
     public function createCustomer(array $data): Order
     {
-        return Customer::create([
-            'customer_id' => $data['customer_id'],
-            'user_id' => Auth::id(),
-            'company_id' => 1,
-            'city_id' => $data['city_id'] ?? null,
-            'district_id' => $data['district_id'] ?? null,
-            'neighborhood_id' => $data['neighborhood_id'] ?? null,
-            'quantity' => $data['quantity'],
-            'sum' => $data['sum'] ?? null,
-            'date' => $data['date'],
-            'address' => $data['address'] ?? null,
-            'note' => $data['note'] ?? null,
-            'location' => $data['location'] ?? null,
-            'status' => 1,
-        ]);
+        return Customer::create([]);
     }
 
     public function updateCustomer(Order $order, array $data): Order

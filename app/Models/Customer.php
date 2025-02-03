@@ -5,11 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Customer extends Model
 {
     const ACTIVE = 1;
     const DEACTIVE = 0;
+
+    protected $dates = ['date_of_birth'];
 
     protected $fillable = [
         'user_id',
@@ -43,8 +46,8 @@ class Customer extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function customerDetails(): HasMany
+    public function customerDetail(): HasOne
     {
-        return $this->hasMany(CustomerDetail::class);
+        return $this->hasOne(CustomerDetail::class);
     }
 }

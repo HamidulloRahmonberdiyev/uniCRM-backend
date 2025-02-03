@@ -11,9 +11,9 @@ class CustomerDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'city' => new CityResource($this->city),
-            'district' => new DistrictResource($this->district),
-            'neighborhood' => new NeighborhoodResource($this->neighborhood),
+            'city' => $this->city->name,
+            'district' => $this->district->name,
+            'neighborhood' => $this->neighborhood->name,
             'home' => $this->home,
         ];
     }

@@ -18,7 +18,7 @@ class CustomerResource extends JsonResource
             'phone' => $this->phone,
             'phone2' => $this->phone2,
             'status' => $this->status,
-            'customer_details' => CustomerDetailResource::collection($this->customerDetails),
+            'customer_detail' => $this->customerDetail ? new CustomerDetailResource($this->customerDetail) : null,
         ];
     }
 }

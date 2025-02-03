@@ -3,6 +3,7 @@
 namespace App\Services\Order;
 
 use App\Models\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -27,11 +28,11 @@ class OrderService
             'neighborhood_id' => $data['neighborhood_id'] ?? null,
             'quantity' => $data['quantity'],
             'sum' => $data['sum'] ?? null,
-            'date' => $data['date'],
+            'date' => Carbon::today(),
             'address' => $data['address'] ?? null,
             'note' => $data['note'] ?? null,
             'location' => $data['location'] ?? null,
-            'status' => 1,
+            'status' => Order::ACTIVE,
         ]);
     }
 

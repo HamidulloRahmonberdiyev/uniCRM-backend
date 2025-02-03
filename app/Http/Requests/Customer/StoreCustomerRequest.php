@@ -14,15 +14,15 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'user_id' => 'required|integer|exists:users,id',
-            'company_id' => 'required|integer|exists:companies,id',
+            'user_id' => 'nullable|integer|exists:users,id',
+            'company_id' => 'nullable|integer|exists:companies,id',
             'first_name' => 'required|string|max:255',
-            'last_name' => 'required|string|max:255',
+            'last_name' => 'nullable|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
-            'phone' => 'required|string|max:15',
-            'phone2' => 'nullable|string|max:15',
-            'status' => 'boolean',
+            'phone' => 'required|string|max:15|unique:customers,phone',
+            'phone2' => 'nullable|string|max:15|unique:customers,phone2',
+            'status' => 'nullable|boolean',
         ];
     }
 }

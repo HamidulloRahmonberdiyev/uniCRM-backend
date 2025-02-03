@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class CustomerService
 {
@@ -16,31 +17,44 @@ class CustomerService
         return $customers;
     }
 
-    public function createCustomer(array $data): Order
+    public function createCustomer(array $data): Customer
     {
-        return Customer::create([]);
+        return DB::transaction(function () use ($data) {
+            $customer = Customer::create([
+                'user_id'      => Auth::id(),
+                'company_id'   => 1,
+                'first_name'   => $data['first_name'],
+                'last_name'    => $data['last_name'] ?? null,
+                'middle_name'  => $data['middle_name'] ?? null,
+                'date_of_birth' => $data['date_of_birth'] ?? null,
+                'phone'        => $data['phone'],
+                'phone2'       => $data['phone2'] ?? null,
+                'status'       => Customer::ACTIVE,
+            ]);
+
+            if (!empty($data['customer_detail'])) {
+                $customer->customerDetail()->create([
+                    'region_id'      => $data['customer_detail']['region_id'] ?? null,
+                    'city_id'        => $data['customer_detail']['city_id'] ?? null,
+                    'district_id'    => $data['customer_detail']['district_id'] ?? null,
+                    'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? null,
+                    'home'           => $data['customer_detail']['home'] ?? null,
+                ]);
+            }
+
+            return $customer;
+        });
     }
 
     public function updateCustomer(Order $order, array $data): Order
     {
-        $order->update([
-            'customer_id' => $data['customer_id'],
-            'city_id' => $data['city_id'] ?? null,
-            'district_id' => $data['district_id'] ?? null,
-            'neighborhood_id' => $data['neighborhood_id'] ?? null,
-            'quantity' => $data['quantity'],
-            'sum' => $data['sum'] ?? null,
-            'address' => $data['address'] ?? null,
-            'note' => $data['note'] ?? null,
-            'location' => $data['location'] ?? null,
-            'status' => $data['status'],
-        ]);
+        $order->update([]);
 
         return $order;
     }
 
-    public function deleteCustomer(Order $order): void
+    public function deleteCustomer(Customer $customer): void
     {
-        $order->delete();
+        $customer->delete();
     }
 }

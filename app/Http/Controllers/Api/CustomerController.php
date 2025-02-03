@@ -50,6 +50,7 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
+        dd($request);
         $customer->update($request->validated());
         return $this->successResponse($customer, 'Customer updated successfully');
     }

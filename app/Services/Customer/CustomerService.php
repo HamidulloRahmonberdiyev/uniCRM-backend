@@ -46,11 +46,34 @@ class CustomerService
         });
     }
 
-    public function updateCustomer(Order $order, array $data): Order
+    public function updateCustomer(Customer $customer, array $data): Customer
     {
-        $order->update([]);
+        return DB::transaction(function () use ($customer, $data) {
+            $customer->update([
+                'first_name'   => $data['first_name'] ?? $customer->first_name,
+                'last_name'    => $data['last_name'] ?? $customer->last_name,
+                'middle_name'  => $data['middle_name'] ?? $customer->middle_name,
+                'date_of_birth' => $data['date_of_birth'] ?? $customer->date_of_birth,
+                'phone'        => $data['phone'] ?? $customer->phone,
+                'phone2'       => $data['phone2'] ?? $customer->phone2,
+                'status'       => $data['status'] ?? $customer->status,
+            ]);
 
-        return $order;
+            if (!empty($data['customer_detail'])) {
+                $customer->customerDetail()->updateOrCreate(
+                    ['customer_id' => $customer->id],
+                    [
+                        'region_id'       => $data['customer_detail']['region_id'] ?? $customer->customerDetail->region_id ?? null,
+                        'city_id'         => $data['customer_detail']['city_id'] ?? $customer->customerDetail->city_id ?? null,
+                        'district_id'     => $data['customer_detail']['district_id'] ?? $customer->customerDetail->district_id ?? null,
+                        'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? $customer->customerDetail->neighborhood_id ?? null,
+                        'home'            => $data['customer_detail']['home'] ?? $customer->customerDetail->home ?? null,
+                    ]
+                );
+            }
+
+            return $customer;
+        });
     }
 
     public function deleteCustomer(Customer $customer): void

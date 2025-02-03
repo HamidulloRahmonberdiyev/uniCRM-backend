@@ -12,19 +12,18 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'customer' => new CustomerResource($this->customer),
-            // 'user' => new UserResource($this->user),
-            // 'company' => new CompanyResource($this->company),
-            'city' => new CityResource($this->city),
-            'district' => new DistrictResource($this->district),
-            'neighborhood' => new NeighborhoodResource($this->neighborhood),
+            'user' => $this->user->name,
+            'city' => $this->city->name ?? null,
+            'district' => $this->district->name ?? null,
+            'neighborhood' => $this->neighborhood->name ?? null,
             'quantity' => $this->quantity,
-            'sum' => $this->sum,
-            'date' => $this->date->format('Y-m-d'),
+            'sum' => $this->sum ?? null,
+            'date' => formatDate($this->date),
             'address' => $this->address,
             'note' => $this->note,
             'location' => $this->location,
             'status' => (bool) $this->status,
-            'updated_at' => $this->updated_at->format('Y-m-d H:i:s'),
+            'created_at' => formatDateTime($this->created_at),
         ];
     }
 }

@@ -14,7 +14,7 @@ class CustomerResource extends JsonResource
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
             'middle_name' => $this->middle_name,
-            'date_of_birth' => $this->date_of_birth->format('Y-m-d'),
+            'date_of_birth' => formatDate($this->date_of_birth),
             'phone' => $this->phone,
             'phone2' => $this->phone2,
             'status' => $this->status,

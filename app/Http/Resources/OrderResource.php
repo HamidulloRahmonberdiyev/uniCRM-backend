@@ -12,8 +12,8 @@ class OrderResource extends JsonResource
         return [
             'id' => $this->id,
             'customer' => new CustomerResource($this->customer),
-            'user' => new UserResource($this->user),
-            'company' => new CompanyResource($this->company),
+            // 'user' => new UserResource($this->user),
+            // 'company' => new CompanyResource($this->company),
             'city' => new CityResource($this->city),
             'district' => new DistrictResource($this->district),
             'neighborhood' => new NeighborhoodResource($this->neighborhood),

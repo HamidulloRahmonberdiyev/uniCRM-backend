@@ -9,6 +9,7 @@ use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Services\Auth\AuthService;
 use App\Traits\ApiJsonResponceTrait;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -81,5 +82,16 @@ class AuthController extends Controller
         } catch (\Exception $e) {
             return $this->errorResponse('Logout failed', 500);
         }
+    }
+
+    public function profile()
+    {
+        $user = User::findOrFail(Auth::id());
+
+        if (!$user) {
+            $this->errorResponse('No authenticated user found', 401);
+        }
+
+        return new UserResource($user);
     }
 }

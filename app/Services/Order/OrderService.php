@@ -37,12 +37,29 @@ class OrderService
 
     public function updateOrder(Order $order, array $data): Order
     {
-        $order->update($data);
+        $order->update([
+            'customer_id' => $data['customer_id'],
+            'city_id' => $data['city_id'] ?? null,
+            'district_id' => $data['district_id'] ?? null,
+            'neighborhood_id' => $data['neighborhood_id'] ?? null,
+            'quantity' => $data['quantity'],
+            'sum' => $data['sum'] ?? null,
+            'address' => $data['address'] ?? null,
+            'note' => $data['note'] ?? null,
+            'location' => $data['location'] ?? null,
+            'status' => $data['status'],
+        ]);
+
         return $order;
     }
 
     public function deleteOrder(Order $order): void
     {
         $order->delete();
+    }
+
+    public function changeStatusOrder(Order $order, $data)
+    {
+        return $order->update(['status' => $data]);
     }
 }

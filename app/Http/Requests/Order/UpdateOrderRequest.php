@@ -15,7 +15,6 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'customer_id' => 'sometimes|exists:customers,id',
-            'user_id' => 'sometimes|exists:users,id',
             'company_id' => 'sometimes|exists:companies,id',
             'city_id' => 'sometimes|exists:cities,id',
             'district_id' => 'sometimes|exists:districts,id',
@@ -26,7 +25,7 @@ class UpdateOrderRequest extends FormRequest
             'address' => 'nullable|string|max:255',
             'note' => 'nullable|string|max:500',
             'location' => 'nullable|string',
-            'status' => 'sometimes|boolean',
+            'status' => 'sometimes|integer',
         ];
     }
 }

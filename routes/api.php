@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -13,6 +14,7 @@ Route::get('/user', function (Request $request) {
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
     Route::post('login', [AuthController::class, 'login']);
+    Route::get('profile', [AuthController::class, 'profile']);
 
     Route::middleware('auth:sanctum')->group(function () {
         Route::post('logout', [AuthController::class, 'logout']);
@@ -22,7 +24,6 @@ Route::prefix('auth')->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
 
     Route::get('customers/search', [CustomerController::class, 'search']);
-
     Route::get('customers', [CustomerController::class, 'index']);
     Route::get('customers/{customer}', [CustomerController::class, 'show']);
     Route::post('customers/store', [CustomerController::class, 'store']);
@@ -30,5 +31,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
 
     Route::get('orders', [OrderController::class, 'index']);
+    Route::get('orders/{order}', [OrderController::class, 'show']);
     Route::post('orders/store', [OrderController::class, 'store']);
+    Route::put('orders/update/{order}', [OrderController::class, 'update']);
+    Route::delete('orders/delete/{order}', [OrderController::class, 'destroy']);
+    Route::put('orders/change-status/{order}', [OrderController::class, 'changeStatus']);
+
+    Route::get('regions', [RegionController::class, 'index']);
 });

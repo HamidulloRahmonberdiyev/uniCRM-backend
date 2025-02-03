@@ -50,4 +50,13 @@ class OrderController extends Controller
         $this->orderService->deleteOrder($order);
         return $this->successResponse('Order deleted successfully', 200);
     }
+
+    public function changeStatus(Request $request, Order $order)
+    {
+        dd($request->status);
+        $request->validate(['status' => 'required|string']);
+
+        $this->orderService->changeStatusOrder($order, $request->status);
+        return $this->successResponse('Order status changed successfully', 200);
+    }
 }

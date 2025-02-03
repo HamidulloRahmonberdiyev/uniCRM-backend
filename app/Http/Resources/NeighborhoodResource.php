@@ -11,11 +11,9 @@ class NeighborhoodResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'city_id' => $this->region_id,
-            'district_id' => $this->region_id,
             'name' => $this->name,
             'second_name' => $this->name,
-            'status' => $this->region_id,
+            'status' => $this->status,
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
 use App\Models\Customer;
+use App\Services\Customer\CustomerService;
 use App\Traits\ApiJsonResponceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -15,9 +16,16 @@ class CustomerController extends Controller
 {
     use ApiJsonResponceTrait;
 
+    protected CustomerService $customerService;
+
+    public function __construct(CustomerService $customerService)
+    {
+        $this->customerService = $customerService;
+    }
+
     public function index(Request $request)
     {
-        $customers = Customer::paginate($request->input('per_page', 20));
+        $customers = $this->customerService->getAllCustomers($request);
 
         return $this->successResponse([
             'data' => CustomerResource::collection($customers),

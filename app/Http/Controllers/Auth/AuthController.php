@@ -86,12 +86,7 @@ class AuthController extends Controller
 
     public function profile()
     {
-        $user = User::findOrFail(Auth::id());
-
-        if (!$user) {
-            $this->errorResponse('No authenticated user found', 401);
-        }
-
+        $user = Auth::user();
         return new UserResource($user);
     }
 }

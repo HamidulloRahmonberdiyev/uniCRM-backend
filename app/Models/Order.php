@@ -42,7 +42,7 @@ class Order extends Model
             'address' => 'string',
             'note' => 'string',
             'location' => 'string',
-            'status' => 'boolean',
+            'status' => 'integer',
         ];
     }
 

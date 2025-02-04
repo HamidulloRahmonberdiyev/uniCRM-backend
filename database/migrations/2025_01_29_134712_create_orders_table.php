@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('note')->nullable();
             $table->string('location')->nullable();
-            $table->boolean('status')->default(true);
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

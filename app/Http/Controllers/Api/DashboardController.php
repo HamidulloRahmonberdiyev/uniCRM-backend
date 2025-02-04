@@ -12,7 +12,7 @@ class DashboardController extends Controller
 {
     use ApiJsonResponceTrait;
 
-    public function widgets()
+    public function stats()
     {
         $today = Carbon::today();
 
@@ -30,5 +30,18 @@ class DashboardController extends Controller
             'active_orders_count' => $activeOrdersCount,
             'customers_count' => $customersCount,
         ]);
+    }
+
+    public function orders()
+    {
+        $today = Carbon::today();
+
+        $orders = Order::query()
+            ->where('status', Order::ACTIVE)
+            ->whereDate('date', $today)
+            ->latest('created_at')
+            ->paginate(20);
+
+        return $this->successResponse($orders);
     }
 }

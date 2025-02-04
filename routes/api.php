@@ -24,7 +24,10 @@ Route::prefix('auth')->group(function () {
 
 Route::middleware(['auth:sanctum'])->group(function () {
 
-    Route::get('dashboard', [DashboardController::class, 'widgets']);
+    Route::prefix('dashboard')->group(function () {
+        Route::get('stats', [DashboardController::class, 'stats']);
+        Route::get('orders', [DashboardController::class, 'orders']);
+    });
 
     Route::get('customers/search', [CustomerController::class, 'search']);
     Route::get('customers', [CustomerController::class, 'index']);

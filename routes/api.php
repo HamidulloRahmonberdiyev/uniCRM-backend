@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\SorterController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -27,6 +28,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('stats', [DashboardController::class, 'stats']);
         Route::get('orders', [DashboardController::class, 'orders']);
+    });
+
+    Route::prefix('settings')->group(function () {
+        Route::get('sorters', [SorterController::class, 'index']);
+        Route::post('sorters/store', [SorterController::class, 'store']);
+        Route::delete('sorters/delete/{sorter}', [SorterController::class, 'destroy']);
     });
 
     Route::get('customers/search', [CustomerController::class, 'search']);

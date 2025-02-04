@@ -10,7 +10,6 @@ use App\Models\Customer;
 use App\Services\Customer\CustomerService;
 use App\Traits\ApiJsonResponceTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 
 class CustomerController extends Controller
 {

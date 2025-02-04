@@ -58,10 +58,6 @@ class CustomerController extends Controller
 
     public function destroy(Customer $customer)
     {
-        if (Gate::denies('delete', $customer)) {
-            return $this->errorResponse('Unauthorized', 403);
-        }
-
         $customer->delete();
 
         return $this->successResponse(null, 'Customer deleted successfully');

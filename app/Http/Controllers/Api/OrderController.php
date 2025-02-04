@@ -53,7 +53,7 @@ class OrderController extends Controller
 
     public function changeStatus(Request $request, Order $order)
     {
-        $request->validate(['status' => 'required|string']);
+        $request->validate(['status' => 'required|integer']);
 
         $this->orderService->changeStatusOrder($order, $request->status);
         return $this->successResponse('Order status changed successfully', 200);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Models\Order;
 use App\Traits\ApiJsonResponceTrait;
@@ -42,6 +43,6 @@ class DashboardController extends Controller
             ->latest('created_at')
             ->paginate(20);
 
-        return $this->successResponse($orders);
+        return OrderResource::collection($orders);
     }
 }

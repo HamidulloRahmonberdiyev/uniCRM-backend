@@ -13,7 +13,7 @@ class OrderService
     {
         return Order::query()
             ->when($request->has('status'), fn($q) => $q->where('status', $request->status))
-            ->latest('updated_at')
+            ->latest('created_at')
             ->paginate(20);
     }
 

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Auth\AuthController;
@@ -22,6 +23,8 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {
+
+    Route::get('dashboard', [DashboardController::class, 'widgets']);
 
     Route::get('customers/search', [CustomerController::class, 'search']);
     Route::get('customers', [CustomerController::class, 'index']);

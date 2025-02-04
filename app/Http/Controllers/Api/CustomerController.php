@@ -40,6 +40,7 @@ class CustomerController extends Controller
     public function store(StoreCustomerRequest $request)
     {
         $customer = $this->customerService->createCustomer($request->validated());
+
         return new CustomerResource($customer);
     }
 
@@ -50,9 +51,9 @@ class CustomerController extends Controller
 
     public function update(UpdateCustomerRequest $request, Customer $customer)
     {
-        dd($request);
-        $customer->update($request->validated());
-        return $this->successResponse($customer, 'Customer updated successfully');
+        $customer = $this->customerService->updateCustomer($customer, $request->validated());
+
+        return new CustomerResource($customer);
     }
 
     public function destroy(Customer $customer)
@@ -62,6 +63,7 @@ class CustomerController extends Controller
         }
 
         $customer->delete();
+
         return $this->successResponse(null, 'Customer deleted successfully');
     }
 

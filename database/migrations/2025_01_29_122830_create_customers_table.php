@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('date_of_birth')->nullable();
             $table->string('phone');
             $table->string('phone2')->nullable();
-            $table->boolean('status')->nullable();
+            $table->integer('status')->default(1);
             $table->timestamps();
         });
     }

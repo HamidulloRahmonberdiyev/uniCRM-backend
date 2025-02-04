@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Customer extends Model
 {
     const ACTIVE = 1;
-    const DEACTIVE = 0;
+    const DEACTIVE = 2;
 
     protected $dates = ['date_of_birth'];
 
@@ -37,7 +36,7 @@ class Customer extends Model
             'date_of_birth' => 'date',
             'phone' => 'string',
             'phone2' => 'string',
-            'status' => 'boolean',
+            'status' => 'integer',
         ];
     }
 

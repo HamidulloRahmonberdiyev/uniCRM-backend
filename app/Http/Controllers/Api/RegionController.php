@@ -24,7 +24,7 @@ class RegionController extends Controller
         ]);
 
         if ($request->has('region_id')) {
-            $region = Region::with(['cities', 'districts'])->find($request->region_id);
+            $region = Region::with(['cities', 'districts', 'districts.neighborhoods'])->find($request->region_id);
             if (!$region) {
                 return response()->json(['message' => 'Region not found'], 404);
             }
@@ -32,17 +32,23 @@ class RegionController extends Controller
                 'region' => new RegionResource($region),
                 'cities' => CityResource::collection($region->cities),
                 'districts' => DistrictResource::collection($region->districts),
+                'neighborhoods' => NeighborhoodResource::collection(
+                    $region->districts->flatMap->neighborhoods
+                ),
             ]);
         }
 
         if ($request->has('city_id')) {
-            $city = City::with('districts')->find($request->city_id);
+            $city = City::with(['districts', 'districts.neighborhoods'])->find($request->city_id);
             if (!$city) {
                 return response()->json(['message' => 'City not found'], 404);
             }
             return response()->json([
                 'city' => new CityResource($city),
                 'districts' => DistrictResource::collection($city->districts),
+                'neighborhoods' => NeighborhoodResource::collection(
+                    $city->districts->flatMap->neighborhoods
+                ),
             ]);
         }
 

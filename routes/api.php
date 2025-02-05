@@ -43,6 +43,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('customers/update/{customer}', [CustomerController::class, 'update']);
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
 
+    Route::get('orders/stats', [OrderController::class, 'stats']);
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{order}', [OrderController::class, 'show']);
     Route::post('orders/store', [OrderController::class, 'store']);

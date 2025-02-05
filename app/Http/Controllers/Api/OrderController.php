@@ -58,4 +58,22 @@ class OrderController extends Controller
         $this->orderService->changeStatusOrder($order, $request->status);
         return $this->successResponse('Order status changed successfully', 200);
     }
+
+    public function stats(Request $request)
+    {
+        $ordersCount = Order::count();
+
+        $deliveredOrdersCount = Order::where('status', Order::DONE)->count();
+
+        $activeOrdersCount = Order::where('status', Order::ACTIVE)->count();
+
+        $canceledOrdersCount = Order::where('status', Order::CANCEL)->count();
+
+        return $this->successResponse([
+            'orders_count' => $ordersCount,
+            'delivered_orders_count' => $deliveredOrdersCount,
+            'active_orders_count' => $activeOrdersCount,
+            'canceled_orders_count' => $canceledOrdersCount,
+        ]);
+    }
 }

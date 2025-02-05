@@ -17,20 +17,27 @@ class DashboardController extends Controller
     {
         $today = Carbon::today();
 
-        $ordersCount = Order::whereDate('date', $today)->count();
+        $query = Order::query()
+            ->whereDate('date', $today);
 
-        $deliveredOrdersCount = Order::whereDate('date', $today)->where('status', Order::DONE)->count();
-
-        $activeOrdersCount = Order::whereDate('date', $today)->where('status', Order::ACTIVE)->count();
-
-        $customersCount = Customer::where('status', Customer::ACTIVE)->count();
-
-        return $this->successResponse([
-            'orders_count' => $ordersCount,
-            'delivered_orders_count' => $deliveredOrdersCount,
-            'active_orders_count' => $activeOrdersCount,
-            'customers_count' => $customersCount,
-        ]);
+        return [
+            'total' => [
+                'orders' => $query->count(),
+                'bottles' => $query->sum('quantity')
+            ],
+            'done' => [
+                'orders' => (clone $query)->where('status', Order::DONE)->count(),
+                'bottles' => (clone $query)->where('status', Order::DONE)->sum('quantity')
+            ],
+            'active' => [
+                'orders' => (clone $query)->where('status', Order::ACTIVE)->count(),
+                'bottles' => (clone $query)->where('status', Order::ACTIVE)->sum('quantity')
+            ],
+            'canceled' => [
+                'orders' => (clone $query)->where('status', Order::CANCEL)->count(),
+                'bottles' => (clone $query)->where('status', Order::CANCEL)->sum('quantity')
+            ]
+        ];
     }
 
     public function orders()

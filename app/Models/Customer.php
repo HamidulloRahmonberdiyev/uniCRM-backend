@@ -23,6 +23,7 @@ class Customer extends Model
         'phone',
         'phone2',
         'status',
+        'customer_status',
     ];
 
     protected function casts(): array
@@ -37,6 +38,7 @@ class Customer extends Model
             'phone' => 'string',
             'phone2' => 'string',
             'status' => 'integer',
+            'customer_status' => 'string',
         ];
     }
 

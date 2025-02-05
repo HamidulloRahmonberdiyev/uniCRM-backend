@@ -3,7 +3,6 @@
 namespace App\Services\Customer;
 
 use App\Models\Customer;
-use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,7 +11,43 @@ class CustomerService
 {
     public function getAllCustomers(Request $request)
     {
-        $customers = Customer::paginate($request->input('per_page', 20));
+        $request->validate([
+            'days_number' => 'nullable|integer',
+        ]);
+
+        $daysNumber = $request->days_number;
+
+        $query = Customer::select('customers.*')
+            ->addSelect(DB::raw('COALESCE(DATEDIFF(CURRENT_DATE, MAX(orders.date)), DATEDIFF(CURRENT_DATE, customers.created_at)) as days_since_last_order'))
+            ->leftJoin('orders', 'customers.id', '=', 'orders.customer_id')
+            ->groupBy('customers.id')
+            ->orderBy('days_since_last_order', 'asc');
+
+        if ($daysNumber !== null) {
+            $query->havingRaw('days_since_last_order <= ?', [$daysNumber]);
+        } else {
+            $query->orderBy('customers.created_at', 'desc');
+        }
+
+        $customers = $query->paginate(20);
+
+        $customers->each(function ($customer) {
+            if ($customer->days_since_last_order <= 7 && $customer->days_since_last_order !== 0) {
+                $customer->customer_status = 'ACTIVE';
+            } elseif ($customer->days_since_last_order <= 10 && $customer->days_since_last_order !== 0) {
+                $customer->customer_status = 'NORMAL';
+            } elseif ($customer->days_since_last_order > 10) {
+                $customer->customer_status = 'PASSIVE';
+            } else {
+                if ($customer->days_since_last_order > 10) {
+                    $customer->customer_status = 'PASSIVE';
+                } elseif ($customer->days_since_last_order > 7) {
+                    $customer->customer_status = 'NORMAL';
+                } else {
+                    $customer->customer_status = 'ACTIVE';
+                }
+            }
+        });
 
         return $customers;
     }

@@ -18,6 +18,7 @@ class CustomerResource extends JsonResource
             'phone' => $this->phone,
             'phone2' => $this->phone2,
             'status' => $this->status,
+            'customer_status' => $this->customer_status,
             'customer_detail' => $this->customerDetail ? new CustomerDetailResource($this->customerDetail) : null,
         ];
     }

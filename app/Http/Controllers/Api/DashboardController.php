@@ -20,6 +20,8 @@ class DashboardController extends Controller
         $query = Order::query()
             ->whereDate('date', $today);
 
+        $customersCount =  Customer::where('status', Customer::ACTIVE)->count();
+
         return [
             'total' => [
                 'orders' => $query->count(),
@@ -36,7 +38,8 @@ class DashboardController extends Controller
             'canceled' => [
                 'orders' => (clone $query)->where('status', Order::CANCEL)->count(),
                 'bottles' => (clone $query)->where('status', Order::CANCEL)->sum('quantity')
-            ]
+            ],
+            'customers_count' => $customersCount,
         ];
     }
 

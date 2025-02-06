@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Customer;
+use App\Models\CustomerType;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -14,6 +15,10 @@ class UpdateCustomerType extends Command
 
     public function handle()
     {
+        $customerTypes = CustomerType::orderBy('sortable')->get();
+
+        $passiveType = CustomerType::orderBy('sortable', 'desc')->first();
+
         $customers = Customer::select('customers.*')
             ->addSelect(DB::raw('COALESCE(DATEDIFF(CURRENT_DATE, MAX(orders.date)), DATEDIFF(CURRENT_DATE, customers.created_at)) as days_since_last_order'))
             ->leftJoin('orders', 'customers.id', '=', 'orders.customer_id')
@@ -21,19 +26,19 @@ class UpdateCustomerType extends Command
             ->get();
 
         foreach ($customers as $customer) {
-            if ($customer->days_since_last_order <= 7 && $customer->days_since_last_order !== 0) {
-                $customer->type_id = 1;
-            } elseif ($customer->days_since_last_order <= 10 && $customer->days_since_last_order !== 0) {
-                $customer->type_id = 2;
-            } elseif ($customer->days_since_last_order > 10) {
-                $customer->type_id = 3;
-            } else {
-                $customer->type_id = 4;
+            foreach ($customerTypes as $type) {
+                if ($type->number != 0) {
+                    if ($customer->days_since_last_order <= $type->number) {
+                        $customer->type_id = $type->id;
+                        break;
+                    } else {
+                        $customer->type_id = $passiveType->id;
+                    }
+                }
             }
-
             $customer->save();
         }
 
-        $this->info('Customer statuses have been updated successfully.');
+        $this->info('Customer type have been updated successfully.');
     }
 }

@@ -32,10 +32,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::prefix('settings')->group(function () {
-        Route::get('sorters', [SorterController::class, 'index']);
-        Route::post('sorters/store', [SorterController::class, 'store']);
-        Route::delete('sorters/delete/{sorter}', [SorterController::class, 'destroy']);
-
         Route::get('customer-types', [CustomerTypeController::class, 'index']);
         Route::post('customer-types/store', [CustomerTypeController::class, 'store']);
         Route::delete('customer-types/delete/{customerType}', [CustomerTypeController::class, 'destroy']);

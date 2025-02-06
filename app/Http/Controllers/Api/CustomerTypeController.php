@@ -24,6 +24,8 @@ class CustomerTypeController extends Controller
         $validatedData = $request->validate([
             'label' => 'required|string',
             'number' => 'required|integer',
+            'color' => 'nullable|string',
+            'sortable' => 'nullable|integer',
         ]);
 
         try {

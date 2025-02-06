@@ -12,10 +12,16 @@ class CustomerService
     public function getAllCustomers(Request $request)
     {
         $request->validate([
-            'days_number' => 'nullable|integer',
+            'phone' => 'nullable|integer',
+            'type_id' => 'nullable|integer',
+            'type_id' => 'nullable|integer',
         ]);
 
-        $customers = Customer::where('status', Customer::ACTIVE)->orderBy('type_id')->paginate(20);
+        $customers = Customer::where('status', Customer::ACTIVE)
+            ->join('customer_types', 'customers.type_id', '=', 'customer_types.id')
+            ->orderBy('customer_types.sortable')
+            ->select('customers.*')
+            ->paginate(20);
 
         return $customers;
     }

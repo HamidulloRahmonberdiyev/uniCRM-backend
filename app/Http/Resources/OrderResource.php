@@ -11,11 +11,17 @@ class OrderResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'customer' => new CustomerResource($this->customer),
+            'customer' => $this->customer ? [
+                'first_name' => $this->customer->first_name,
+                'last_name' => $this->customer->last_name,
+                'middle_name' => $this->customer->middle_name,
+                'phone' => $this->customer->phone,
+                'phone2' => $this->customer->phone2,
+            ] : null,
             'user' => $this->user->name,
-            'city' => $this->city->name ?? null,
-            'district' => $this->district->name ?? null,
-            'neighborhood' => $this->neighborhood->name ?? null,
+            'city' => $this->city ? new CityResource($this->city) : null,
+            'district' => $this->district ? new DistrictResource($this->district) : null,
+            'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
             'quantity' => $this->quantity,
             'sum' => $this->sum ?? null,
             'date' => formatDate($this->date),

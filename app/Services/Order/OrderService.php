@@ -19,7 +19,7 @@ class OrderService
         ]);
 
         return Order::query()
-            ->select(['id', 'customer_id', 'user_id', 'company_id', 'date', 'status', 'sum'])
+            ->select(['id', 'customer_id', 'user_id', 'company_id', 'date', 'status', 'sum', 'city_id', 'district_id', 'neighborhood_id'])
             ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
             ->when($request->filled('start_date') && $request->filled('end_date'), function ($q) use ($request) {
                 $q->whereBetween('date', [$request->start_date, $request->end_date]);
@@ -36,7 +36,12 @@ class OrderService
                         ->orWhere('phone2', 'like', $search);
                 });
             })
-            ->with(['customer:id,first_name,last_name'])
+            ->with([
+                'customer:id,first_name,last_name,middle_name,phone,phone2',
+                'city:id,name',
+                'district:id,name',
+                'neighborhood:id,name',
+            ])
             ->orderByDesc('created_at')
             ->paginate(20);
     }
@@ -63,7 +68,7 @@ class OrderService
     public function updateOrder(Order $order, array $data): Order
     {
         $order->update([
-            'customer_id' => $data['customer_id'],
+            'customer_id' => $order->customer_id,
             'city_id' => $data['city_id'] ?? null,
             'district_id' => $data['district_id'] ?? null,
             'neighborhood_id' => $data['neighborhood_id'] ?? null,
@@ -85,7 +90,10 @@ class OrderService
 
     public function changeStatusOrder(Order $order, $data)
     {
-        return $order->update(['status' => $data]);
+        return $order->update([
+            'supplier_id' => auth()->user()->isSupplier() && $data == Order::DONE ? Auth::id() : null,
+            'status' => $data
+        ]);
     }
 
     public function getOrderStats(Request $request)

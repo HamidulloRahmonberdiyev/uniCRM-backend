@@ -14,10 +14,12 @@ class Order extends Model
     protected $fillable = [
         'customer_id',
         'user_id',
+        'supplier_id',
         'company_id',
         'city_id',
         'district_id',
         'neighborhood_id',
+        'source_id',
         'quantity',
         'sum',
         'date',
@@ -32,10 +34,12 @@ class Order extends Model
         return [
             'customer_id' => 'integer',
             'user_id' => 'integer',
+            'supplier_id' => 'integer',
             'company_id' => 'integer',
             'city_id' => 'integer',
             'district_id' => 'integer',
             'neighborhood_id' => 'integer',
+            'source_id' => 'integer',
             'quantity' => 'integer',
             'sum' => 'string',
             'date' => 'date',
@@ -53,7 +57,12 @@ class Order extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function supplier(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'supplier_id', 'id');
     }
 
     public function company(): BelongsTo
@@ -74,5 +83,10 @@ class Order extends Model
     public function neighborhood(): BelongsTo
     {
         return $this->belongsTo(Neighborhood::class);
+    }
+
+    public function source(): BelongsTo
+    {
+        return $this->belongsTo(Source::class);
     }
 }

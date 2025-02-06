@@ -42,4 +42,25 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'user_role');
     }
+
+    public function isAdmin()
+    {
+        return $this->roles->contains(function ($value) {
+            return in_array($value->name, ['admin', 'boss']);
+        });
+    }
+
+    public function isSupplier()
+    {
+        return $this->roles->contains(function ($value) {
+            return in_array($value->name, ['supplier']);
+        });
+    }
+
+    public function isOperator()
+    {
+        return $this->roles->contains(function ($value) {
+            return in_array($value->name, ['operator']);
+        });
+    }
 }

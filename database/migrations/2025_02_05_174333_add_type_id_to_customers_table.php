@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->string('customer_status')->default('ACTIVE');
+            $table->bigInteger('type_id')->default(1)->after('status');
         });
     }
 
@@ -22,7 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->dropColumn('customer_status');
+            $table->dropColumn('type_id');
         });
     }
 };

@@ -6,9 +6,9 @@ use App\Models\Customer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
-class UpdateCustomerStatus extends Command
+class UpdateCustomerType extends Command
 {
-    protected $signature = 'update:customer-status';
+    protected $signature = 'update:customer-type';
 
     protected $description = 'Update the customer status based on days since last order';
 
@@ -22,13 +22,13 @@ class UpdateCustomerStatus extends Command
 
         foreach ($customers as $customer) {
             if ($customer->days_since_last_order <= 7 && $customer->days_since_last_order !== 0) {
-                $customer->customer_status = 'ACTIVE';
+                $customer->type_id = 1;
             } elseif ($customer->days_since_last_order <= 10 && $customer->days_since_last_order !== 0) {
-                $customer->customer_status = 'NORMAL';
+                $customer->type_id = 2;
             } elseif ($customer->days_since_last_order > 10) {
-                $customer->customer_status = 'PASSIVE';
+                $customer->type_id = 3;
             } else {
-                $customer->customer_status = 'ACTIVE';
+                $customer->type_id = 4;
             }
 
             $customer->save();

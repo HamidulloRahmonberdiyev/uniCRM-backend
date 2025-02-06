@@ -23,7 +23,7 @@ class Customer extends Model
         'phone',
         'phone2',
         'status',
-        'customer_status',
+        'type_id',
     ];
 
     protected function casts(): array
@@ -38,7 +38,7 @@ class Customer extends Model
             'phone' => 'string',
             'phone2' => 'string',
             'status' => 'integer',
-            'customer_status' => 'string',
+            'type_id' => 'integer',
         ];
     }
 
@@ -50,5 +50,10 @@ class Customer extends Model
     public function customerDetail(): HasOne
     {
         return $this->hasOne(CustomerDetail::class);
+    }
+
+    public function type(): BelongsTo
+    {
+        return $this->belongsTo(CustomerType::class, 'type_id', 'id');
     }
 }

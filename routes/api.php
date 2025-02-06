@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\CustomerTypeController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RegionController;
@@ -34,6 +35,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('sorters', [SorterController::class, 'index']);
         Route::post('sorters/store', [SorterController::class, 'store']);
         Route::delete('sorters/delete/{sorter}', [SorterController::class, 'destroy']);
+
+        Route::get('customer-types', [CustomerTypeController::class, 'index']);
+        Route::post('customer-types/store', [CustomerTypeController::class, 'store']);
+        Route::delete('customer-types/delete/{customerType}', [CustomerTypeController::class, 'destroy']);
     });
 
     Route::get('customers/search', [CustomerController::class, 'search']);

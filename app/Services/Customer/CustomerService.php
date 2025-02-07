@@ -11,19 +11,31 @@ class CustomerService
 {
     public function getAllCustomers(Request $request)
     {
-        $request->validate([
-            'phone' => 'nullable|integer',
-            'type_id' => 'nullable|integer',
-            'type_id' => 'nullable|integer',
-        ]);
+        $query = Customer::where('status', Customer::ACTIVE);
 
-        $customers = Customer::where('status', Customer::ACTIVE)
-            ->join('customer_types', 'customers.type_id', '=', 'customer_types.id')
+        if ($request->filled('type_id')) {
+            $query->where('type_id', $request->type_id);
+        }
+
+        if ($request->filled('name')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('first_name', 'LIKE', "%{$request->name}%")
+                    ->orWhere('last_name', 'LIKE', "%{$request->name}%")
+                    ->orWhere('middle_name', 'LIKE', "%{$request->name}%");
+            });
+        }
+
+        if ($request->filled('phone')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('phone', 'LIKE', "%{$request->phone}%")
+                    ->orWhere('phone2', 'LIKE', "%{$request->phone}%");
+            });
+        }
+
+        return $query->join('customer_types', 'customers.type_id', '=', 'customer_types.id')
             ->orderBy('customer_types.sortable')
             ->select('customers.*')
             ->paginate(20);
-
-        return $customers;
     }
 
     public function createCustomer(array $data): Customer

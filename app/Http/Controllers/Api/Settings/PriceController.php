@@ -29,7 +29,7 @@ class PriceController extends Controller
             $price = Price::create($validatedData);
             return $this->successResponse($price, 201);
         } catch (\Exception $e) {
-            return $this->errorResponse('Failed to create customerType', 500);
+            return $this->errorResponse('Failed to create source', 500);
         }
     }
 

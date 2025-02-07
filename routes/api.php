@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\Settings\BottleController;
 use App\Http\Controllers\Api\Settings\CustomerTypeController;
 use App\Http\Controllers\Api\Settings\PriceController;
+use App\Http\Controllers\Api\Settings\SourceController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 
     Route::prefix('settings')->group(function () {
+        Route::get('sources', [SourceController::class, 'index']);
+        Route::post('sources/store', [SourceController::class, 'store']);
+        Route::put('sources/update/{source}', [SourceController::class, 'update']);
+        Route::delete('sources/delete/{source}', [SourceController::class, 'destroy']);
+
         Route::get('bottles', [BottleController::class, 'index']);
         Route::post('bottles/store', [BottleController::class, 'store']);
         Route::put('bottles/update/{bottle}', [BottleController::class, 'update']);

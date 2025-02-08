@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\RegionController;
+use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
 use App\Http\Controllers\Api\Settings\CustomerTypeController;
 use App\Http\Controllers\Api\Settings\PriceController;
@@ -68,6 +69,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('orders/update/{order}', [OrderController::class, 'update']);
     Route::delete('orders/delete/{order}', [OrderController::class, 'destroy']);
     Route::put('orders/change-status/{order}', [OrderController::class, 'changeStatus']);
+
+    Route::get('returneds', [ReturnedController::class, 'index']);
+    Route::post('returneds/store', [ReturnedController::class, 'store']);
+    Route::put('returneds/update/{returned}', [ReturnedController::class, 'update']);
+    Route::delete('returneds/delete/{returned}', [ReturnedController::class, 'destroy']);
 
     Route::get('regions', [RegionController::class, 'index']);
 });

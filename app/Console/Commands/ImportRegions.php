@@ -9,7 +9,7 @@ class ImportRegions extends Command
 {
     protected $signature = 'import:regions';
 
-    protected $description = 'Import regions, districts, and neighborhoods from a JSON file into the database';
+    protected $description = 'Import regions, cities, districts, and neighborhoods from a JSON file into the database';
 
     public function handle()
     {
@@ -35,6 +35,13 @@ class ImportRegions extends Command
                 );
             }
 
+            foreach ($jsonData['cities'] as $city) {
+                DB::table('cities')->updateOrInsert(
+                    ['id' => $city['id']],
+                    ['region_id' => $city['region_id'], 'name' => $city['name']]
+                );
+            }
+
             foreach ($jsonData['districts'] as $district) {
                 DB::table('districts')->updateOrInsert(
                     ['id' => $district['id']],
@@ -50,6 +57,6 @@ class ImportRegions extends Command
             }
         });
 
-        $this->info("Regions, districts, neighborhoods data imported successfully.");
+        $this->info("Regions, cities, districts, neighborhoods data imported successfully.");
     }
 }

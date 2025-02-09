@@ -3,11 +3,12 @@
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\RegionController;
 use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
+use App\Http\Controllers\Api\Settings\CityController;
 use App\Http\Controllers\Api\Settings\CustomerTypeController;
 use App\Http\Controllers\Api\Settings\PriceController;
+use App\Http\Controllers\Api\Settings\RegionController;
 use App\Http\Controllers\Api\Settings\SourceController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
@@ -53,6 +54,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('customer-types', [CustomerTypeController::class, 'index']);
         Route::post('customer-types/store', [CustomerTypeController::class, 'store']);
         Route::delete('customer-types/delete/{customerType}', [CustomerTypeController::class, 'destroy']);
+
+        Route::get('regions', [RegionController::class, 'index']);
+
+        Route::get('cities', [CityController::class, 'index']);
+        Route::post('cities/store', [CityController::class, 'store']);
+        Route::put('cities/update/{city}', [CityController::class, 'update']);
+        Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
     });
 
     Route::get('customers/search', [CustomerController::class, 'search']);
@@ -74,6 +82,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('returneds/store', [ReturnedController::class, 'store']);
     Route::put('returneds/update/{returned}', [ReturnedController::class, 'update']);
     Route::delete('returneds/delete/{returned}', [ReturnedController::class, 'destroy']);
-
-    Route::get('regions', [RegionController::class, 'index']);
 });

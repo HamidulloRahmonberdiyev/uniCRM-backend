@@ -12,6 +12,7 @@ class City extends Model
     const DEACTIVE = 0;
 
     protected $fillable = [
+        'region_id',
         'name',
         'status',
     ];

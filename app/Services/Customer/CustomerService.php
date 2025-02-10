@@ -3,6 +3,7 @@
 namespace App\Services\Customer;
 
 use App\Models\Customer;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -100,5 +101,22 @@ class CustomerService
     public function deleteCustomer(Customer $customer): void
     {
         $customer->delete();
+    }
+
+    public function getOrderHistory(Customer $customer, array $data)
+    {
+        $startDate = Carbon::parse($data['start_date'])->startOfDay();
+        $endDate = Carbon::parse($data['end_date'])->startOfDay();
+
+        $query = $customer->orders();
+
+        if ($startDate) {
+            $query->where('date', '>=', $startDate);
+        }
+        if ($endDate) {
+            $query->where('date', '<=', $endDate);
+        }
+
+        return $query->orderBy('created_at', 'desc')->paginate(10);
     }
 }

@@ -69,6 +69,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('customers/store', [CustomerController::class, 'store']);
     Route::put('customers/update/{customer}', [CustomerController::class, 'update']);
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
+    Route::get('customers/{customer}/order-history', [CustomerController::class, 'order_history']);
 
     Route::get('orders/stats', [OrderController::class, 'stats']);
     Route::get('orders', [OrderController::class, 'index']);

@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
+use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Services\Customer\CustomerService;
 use App\Traits\ApiJsonResponceTrait;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller
@@ -107,5 +109,17 @@ class CustomerController extends Controller
         });
 
         return $this->successResponse($customers);
+    }
+
+    public function order_history(Request $request, Customer $customer)
+    {
+        $validated = $request->validate([
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+        ]);
+
+        $orders = $this->customerService->getOrderHistory($customer, $validated);
+
+        return OrderResource::collection($orders);
     }
 }

@@ -29,6 +29,7 @@ class OrderResource extends JsonResource
             'note' => $this->note,
             'location' => $this->location,
             'status' => $this->status,
+            'source' => $this->source->name ?? null,
             'created_at' => formatDateTime($this->created_at),
         ];
     }

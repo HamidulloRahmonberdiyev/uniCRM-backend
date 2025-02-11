@@ -122,4 +122,10 @@ class CustomerController extends Controller
 
         return OrderResource::collection($orders);
     }
+
+    public function stats()
+    {
+        $stats = $this->customerService->getCustomerStats();
+        return $this->successResponse($stats);
+    }
 }

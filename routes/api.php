@@ -63,6 +63,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
     });
 
+    Route::get('customers/stats', [CustomerController::class, 'stats']);
     Route::get('customers/search', [CustomerController::class, 'search']);
     Route::get('customers', [CustomerController::class, 'index']);
     Route::get('customers/{customer}', [CustomerController::class, 'show']);

@@ -119,4 +119,21 @@ class CustomerService
 
         return $query->orderBy('created_at', 'desc')->paginate(10);
     }
+
+    public function getCustomerStats()
+    {
+        $stats = Customer::query()
+            ->selectRaw('COUNT(*) as total')
+            ->selectRaw('SUM(CASE WHEN type_id = 1 THEN 1 ELSE 0 END) as active')
+            ->selectRaw('SUM(CASE WHEN type_id = 2 THEN 1 ELSE 0 END) as normal')
+            ->selectRaw('SUM(CASE WHEN type_id = 3 THEN 1 ELSE 0 END) as passive')
+            ->first();
+
+        return [
+            'total' => $stats->total,
+            'active' => $stats->active,
+            'normal' => $stats->normal,
+            'passive' => $stats->passive
+        ];
+    }
 }

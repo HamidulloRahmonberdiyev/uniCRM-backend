@@ -49,8 +49,8 @@ class CustomerService
                 'last_name'    => $data['last_name'] ?? null,
                 'middle_name'  => $data['middle_name'] ?? null,
                 'date_of_birth' => $data['date_of_birth'] ?? null,
-                'phone'        => $data['phone'],
-                'phone2'       => $data['phone2'] ?? null,
+                'phone'        => sanitizePhone($data['phone']),
+                'phone2'       => sanitizePhone($data['phone2'] ?? null),
                 'status'       => Customer::ACTIVE,
             ]);
 

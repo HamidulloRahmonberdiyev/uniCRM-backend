@@ -63,6 +63,7 @@ class OrderService
             'note' => $data['note'] ?? null,
             'location' => $data['location'] ?? null,
             'status' => Order::ACTIVE,
+            'source_id' => $data['source_id'] ?? 1,
         ]);
     }
 

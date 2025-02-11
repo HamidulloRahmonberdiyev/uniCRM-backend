@@ -10,6 +10,7 @@ class CustomerTypeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id' => $this->id,
             'label' => $this->label,
             'number' => $this->number,
             'color' => $this->color,

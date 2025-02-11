@@ -12,6 +12,7 @@ class CustomerTypeResource extends JsonResource
         return [
             'label' => $this->label,
             'number' => $this->number,
+            'color' => $this->color,
         ];
     }
 }

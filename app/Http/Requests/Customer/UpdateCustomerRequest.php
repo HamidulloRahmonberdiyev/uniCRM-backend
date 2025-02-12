@@ -23,13 +23,13 @@ class UpdateCustomerRequest extends FormRequest
             'phone' => [
                 'required',
                 'string',
-                'max:15',
+                'max:17',
                 Rule::unique('customers', 'phone')->ignore($customerId),
             ],
             'phone2' => [
                 'nullable',
                 'string',
-                'max:15',
+                'max:17',
                 Rule::unique('customers', 'phone2')->ignore($customerId),
             ],
             'status' => 'sometimes|integer',

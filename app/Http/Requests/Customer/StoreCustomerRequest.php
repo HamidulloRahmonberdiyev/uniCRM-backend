@@ -20,8 +20,8 @@ class StoreCustomerRequest extends FormRequest
             'last_name' => 'nullable|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
-            'phone' => 'required|string|max:15|unique:customers,phone',
-            'phone2' => 'nullable|string|max:15|unique:customers,phone2',
+            'phone' => 'required|string|max:17|unique:customers,phone',
+            'phone2' => 'nullable|string|max:17|unique:customers,phone2',
             'status' => 'nullable|integer',
 
             'customer_detail' => 'nullable|array',

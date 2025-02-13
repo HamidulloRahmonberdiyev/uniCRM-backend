@@ -12,7 +12,7 @@ class NeighborhoodResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'second_name' => $this->name,
+            'second_name' => $this->second_name,
             'status' => $this->status,
         ];
     }

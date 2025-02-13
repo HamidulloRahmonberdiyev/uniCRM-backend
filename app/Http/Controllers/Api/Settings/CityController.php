@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Settings;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Cities\StoreCityRequest;
 use App\Http\Requests\Cities\UpdateCityRequest;
+use App\Http\Resources\CityDetailResource;
 use App\Http\Resources\CityResource;
 use App\Models\City;
 use App\Traits\ApiJsonResponceTrait;
@@ -37,7 +38,7 @@ class CityController extends Controller
 
     public function show(City $city)
     {
-        return new CityResource($city->load('region'));
+        return new CityDetailResource($city->load('neighborhoods'));
     }
 
     public function update(UpdateCityRequest $request, City $city)
@@ -50,5 +51,16 @@ class CityController extends Controller
     {
         $city->delete();
         return $this->successResponse('City deleted successfully');
+    }
+
+    public function change_status(Request $request, City $city)
+    {
+        $request->validate([
+            'status' => 'required|integer'
+        ]);
+
+        $city->update(['status' => $request->status]);
+
+        return $this->successResponse($city);
     }
 }

@@ -23,6 +23,11 @@ class Region extends Model
         ];
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
     public function cities(): HasMany
     {
         return $this->hasMany(City::class);

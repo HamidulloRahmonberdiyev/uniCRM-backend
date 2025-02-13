@@ -29,6 +29,11 @@ class Neighborhood extends Model
         ];
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
     public function city(): BelongsTo
     {
         return $this->belongsTo(City::class);

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class RegionResource extends JsonResource
+class DistrictDetailResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
@@ -13,6 +13,7 @@ class RegionResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'status' => $this->status,
+            'neighborhoods' => $this->neighborhoods ? NeighborhoodResource::collection($this->neighborhoods) : null,
         ];
     }
 }

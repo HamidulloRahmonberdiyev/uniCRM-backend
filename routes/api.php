@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
 use App\Http\Controllers\Api\Settings\CityController;
 use App\Http\Controllers\Api\Settings\CustomerTypeController;
+use App\Http\Controllers\Api\Settings\DistrictController;
 use App\Http\Controllers\Api\Settings\PriceController;
 use App\Http\Controllers\Api\Settings\RegionController;
 use App\Http\Controllers\Api\Settings\SourceController;
@@ -56,11 +57,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('customer-types/delete/{customerType}', [CustomerTypeController::class, 'destroy']);
 
         Route::get('regions', [RegionController::class, 'index']);
+        Route::get('regions/details', [RegionController::class, 'region_details']);
+        Route::post('regions/{region}/change-status', [RegionController::class, 'change_status']);
+
+        Route::get('districts', [DistrictController::class, 'index']);
+        Route::get('districts/{district}', [DistrictController::class, 'show']);
+        Route::post('districts/{district}/change-status', [DistrictController::class, 'change_status']);
 
         Route::get('cities', [CityController::class, 'index']);
+        Route::get('cities/{city}', [CityController::class, 'show']);
         Route::post('cities/store', [CityController::class, 'store']);
         Route::put('cities/update/{city}', [CityController::class, 'update']);
         Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
+        Route::post('cities/{city}/change-status', [CityController::class, 'change_status']);
     });
 
     Route::get('customers/stats', [CustomerController::class, 'stats']);

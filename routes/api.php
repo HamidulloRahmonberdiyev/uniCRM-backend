@@ -72,6 +72,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::post('cities/{city}/change-status', [CityController::class, 'change_status']);
     });
 
+    Route::get('customers/search-by-phone', [CustomerController::class, 'searchByPhoneNumber']);
     Route::get('customers/stats', [CustomerController::class, 'stats']);
     Route::get('customers/search', [CustomerController::class, 'search']);
     Route::get('customers', [CustomerController::class, 'index']);

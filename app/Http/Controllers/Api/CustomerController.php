@@ -128,4 +128,19 @@ class CustomerController extends Controller
         $stats = $this->customerService->getCustomerStats();
         return $this->successResponse($stats);
     }
+
+    public function searchByPhoneNumber(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|string',
+        ]);
+
+        $sanitizedPhone = sanitizePhone($request->phone);
+
+        $customer = Customer::where('phone', $sanitizedPhone)
+            ->orWhere('phone2', $sanitizedPhone)
+            ->first();
+
+        return new CustomerResource($customer);
+    }
 }

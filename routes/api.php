@@ -82,6 +82,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
     Route::get('customers/{customer}/order-history', [CustomerController::class, 'order_history']);
 
+    Route::get('orders/actives', [OrderController::class, 'activeOrders']);
     Route::get('orders/stats', [OrderController::class, 'stats']);
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{order}', [OrderController::class, 'show']);

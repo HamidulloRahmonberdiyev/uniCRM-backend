@@ -14,6 +14,7 @@ class OrderService
         $phone = $nameOrPhone['phone'] ?? '';
 
         $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+            ->where('supplier_id', null)
             ->where('status', Order::ACTIVE)
             ->whereHas('customer', function ($q) use ($name, $phone) {
                 if (!empty($name)) {

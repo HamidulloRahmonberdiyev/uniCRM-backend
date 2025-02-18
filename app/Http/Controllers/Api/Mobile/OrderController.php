@@ -34,7 +34,7 @@ class OrderController extends Controller
 
     public function deliveryStats()
     {
-        $activesCount = Order::where('status', Order::ACTIVE)->count();
+        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id())->count();
 
         $deliveredCount = Order::where('supplier_id', Auth::id())->where('status', Order::DONE)->count();
 

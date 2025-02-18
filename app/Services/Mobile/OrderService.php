@@ -3,6 +3,7 @@
 namespace App\Services\Mobile;
 
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
@@ -45,6 +46,16 @@ class OrderService
                 ) THEN 2
                 ELSE 3
             END)", ["%{$phone}%", "%{$phone}%", "%{$name}%", "%{$name}%", "%{$name}%"])
+            ->get();
+
+        return $orders;
+    }
+
+    public function getBookedOrders()
+    {
+        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+            ->where('supplier_id', Auth::id())
+            ->where('status', Order::ACTIVE)
             ->get();
 
         return $orders;

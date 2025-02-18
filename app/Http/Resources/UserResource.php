@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Order;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -13,11 +14,11 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'email' => $this->email,
             'username' => $this->username,
-            'phone' => $this->phone,
-            'email_verified_at' => $this->email_verified_at,
+            'phone' => formatPhone($this->phone),
             'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'role_name' => $this->role_name,
             'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'orders_count' => Order::where('supplier_id', $this->id)->where('status', Order::DONE)->count(),
         ];
     }
 }

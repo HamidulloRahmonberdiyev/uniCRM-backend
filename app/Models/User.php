@@ -63,4 +63,11 @@ class User extends Authenticatable
             return in_array($value->name, ['operator']);
         });
     }
+
+    public function getRoleNameAttribute(): string
+    {
+        return optional($this->roles->first())->name === 'supplier'
+            ? 'Yetkazib beruvchi'
+            : optional($this->roles->first())->name ?? 'Xodim';
+    }
 }

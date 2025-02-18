@@ -92,8 +92,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('orders/change-status/{order}', [OrderController::class, 'changeStatus']);
 
     Route::prefix('mobile')->group(function () {
-        Route::get('orders/actives', [MobileOrderController::class, 'activeOrders']);
-        Route::get('delivery/stats', [MobileOrderController::class, 'deliveryStats']);
+        Route::prefix('orders')->group(function () {
+            Route::get('actives', [MobileOrderController::class, 'activeOrders']);
+            Route::get('booked', [MobileOrderController::class, 'bookedOrders']);
+            Route::put('booking/{order}', [MobileOrderController::class, 'bookingOrder']);
+        });
     });
 
     Route::get('returneds', [ReturnedController::class, 'index']);

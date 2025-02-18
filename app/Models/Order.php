@@ -25,7 +25,8 @@ class Order extends Model
         'date',
         'address',
         'note',
-        'location',
+        'latitude',
+        'longitude',
         'status',
     ];
 
@@ -45,7 +46,6 @@ class Order extends Model
             'date' => 'date',
             'address' => 'string',
             'note' => 'string',
-            'location' => 'string',
             'status' => 'integer',
         ];
     }

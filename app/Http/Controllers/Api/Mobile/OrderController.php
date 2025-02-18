@@ -21,6 +21,15 @@ class OrderController extends Controller
         $this->mobileOrderService = $mobileOrderService;
     }
 
+    public function bookingOrder(Order $order)
+    {
+        $order->update([
+            'supplier_id' => Auth::id(),
+        ]);
+
+        return $this->successResponse($order);
+    }
+
     public function activeOrders(Request $request)
     {
         $validated = $request->validate([
@@ -28,6 +37,13 @@ class OrderController extends Controller
         ]);
 
         $orders = $this->mobileOrderService->getActiveOrders($validated);
+
+        return OrderDetailResource::collection($orders);
+    }
+
+    public function bookedOrders()
+    {
+        $orders = $this->mobileOrderService->getBookedOrders();
 
         return OrderDetailResource::collection($orders);
     }

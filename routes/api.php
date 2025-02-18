@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\Mobile\OrderController as MobileOrderController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
@@ -82,7 +83,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::delete('customers/delete/{customer}', [CustomerController::class, 'destroy']);
     Route::get('customers/{customer}/order-history', [CustomerController::class, 'order_history']);
 
-    Route::get('orders/actives', [OrderController::class, 'activeOrders']);
     Route::get('orders/stats', [OrderController::class, 'stats']);
     Route::get('orders', [OrderController::class, 'index']);
     Route::get('orders/{order}', [OrderController::class, 'show']);
@@ -90,6 +90,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('orders/update/{order}', [OrderController::class, 'update']);
     Route::delete('orders/delete/{order}', [OrderController::class, 'destroy']);
     Route::put('orders/change-status/{order}', [OrderController::class, 'changeStatus']);
+
+    Route::prefix('mobile')->group(function () {
+        Route::get('orders/actives', [MobileOrderController::class, 'activeOrders']);
+        Route::get('delivery/stats', [MobileOrderController::class, 'deliveryStats']);
+    });
 
     Route::get('returneds', [ReturnedController::class, 'index']);
     Route::post('returneds/store', [ReturnedController::class, 'store']);

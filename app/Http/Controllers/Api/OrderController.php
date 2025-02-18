@@ -8,6 +8,7 @@ use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Http\Resources\Orders\OrderDetailResource;
 use App\Models\Order;
+use App\Services\Mobile\OrderService as MobileOrderService;
 use App\Services\Order\OrderService;
 use App\Traits\ApiJsonResponceTrait;
 use Illuminate\Http\Request;
@@ -64,14 +65,5 @@ class OrderController extends Controller
     {
         $stats = $this->orderService->getOrderStats($request);
         return response()->json(['success' => true, 'data' => $stats]);
-    }
-
-    public function activeOrders()
-    {
-        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
-            ->where('status', Order::ACTIVE)
-            ->get();
-
-        return OrderDetailResource::collection($orders);
     }
 }

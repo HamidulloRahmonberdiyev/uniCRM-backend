@@ -98,4 +98,23 @@ if (!function_exists('formatPhone')) {
             substr($phone, 10, 2)
         );
     }
+
+    if (!function_exists('extractNameAndPhone')) {
+        /**
+         * Berilgan matndan ism va telefon raqamini ajratib oladi.
+         *
+         * @param string $input Foydalanuvchidan olingan ism yoki telefon raqami
+         * @return array ['name' => '...', 'phone' => '...']
+         */
+        function extractNameAndPhone(string $input): array
+        {
+            $name = trim(preg_replace('/[^a-zA-Z\s]/', '', $input)) ?: null;
+            $phone = trim(preg_replace('/[^0-9]/', '', $input)) ?: null;
+
+            return [
+                'name' => $name ?? '',
+                'phone' => $phone ?? '',
+            ];
+        }
+    }
 }

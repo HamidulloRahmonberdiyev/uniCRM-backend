@@ -47,16 +47,4 @@ class OrderController extends Controller
 
         return OrderDetailResource::collection($orders);
     }
-
-    public function deliveryStats()
-    {
-        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id())->count();
-
-        $deliveredCount = Order::where('supplier_id', Auth::id())->where('status', Order::DONE)->count();
-
-        return [
-            'active_orders' => $activesCount,
-            'delivered_orders' => $deliveredCount,
-        ];
-    }
 }

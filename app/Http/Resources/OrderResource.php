@@ -27,7 +27,7 @@ class OrderResource extends JsonResource
             'date' => formatDate($this->date),
             'address' => $this->address,
             'note' => $this->note,
-            'lotitude' => $this->lotitude,
+            'lotitude' => $this->latitude,
             'longitude' => $this->longitude,
             'status' => $this->status,
             'source' => $this->source->name ?? null,

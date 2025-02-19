@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Mobile\OrderController as MobileOrderController;
+use App\Http\Controllers\Api\Mobile\SupplierController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
@@ -93,6 +94,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('orders/change-status/{order}', [OrderController::class, 'changeStatus']);
 
     Route::prefix('mobile')->group(function () {
+
+        Route::prefix('supplier')->group(function () {
+            Route::get('stats', [SupplierController::class, 'supplierStats']);
+        });
+
         Route::prefix('orders')->group(function () {
             Route::get('actives', [MobileOrderController::class, 'activeOrders']);
             Route::get('booked', [MobileOrderController::class, 'bookedOrders']);

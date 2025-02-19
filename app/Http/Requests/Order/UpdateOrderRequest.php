@@ -23,7 +23,8 @@ class UpdateOrderRequest extends FormRequest
             'date' => 'sometimes|date',
             'address' => 'nullable|string|max:255',
             'note' => 'nullable|string|max:500',
-            'location' => 'nullable|string',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
             'status' => 'sometimes|integer',
         ];
     }

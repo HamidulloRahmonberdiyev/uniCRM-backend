@@ -18,6 +18,11 @@ class PriceController extends Controller
         return $this->successResponse($prices);
     }
 
+    public function show()
+    {
+        return response()->json([Price::firstOrFail()]);
+    }
+
     public function store(Request $request)
     {
         $validatedData = $request->validate([

@@ -2,6 +2,7 @@
 
 namespace App\Services\Order;
 
+use App\Models\Neighborhood;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -49,6 +50,12 @@ class OrderService
 
     public function createOrder(array $data): Order
     {
+        if (!empty($data['neighborhood_id'])) {
+            $neighborhood = Neighborhood::find($data['neighborhood_id']);
+            $data['district_id'] = $neighborhood?->district_id;
+            $data['city_id'] = $neighborhood?->city_id;
+        }
+
         return Order::create([
             'customer_id' => $data['customer_id'],
             'user_id' => Auth::id(),
@@ -61,7 +68,8 @@ class OrderService
             'date' => Carbon::today(),
             'address' => $data['address'] ?? null,
             'note' => $data['note'] ?? null,
-            'location' => $data['location'] ?? null,
+            'latitude' => $data['latitude'] ?? null,
+            'longitude' => $data['longitude'] ?? null,
             'status' => Order::ACTIVE,
             'source_id' => $data['source_id'] ?? 1,
         ]);
@@ -70,6 +78,13 @@ class OrderService
     public function updateOrder(Order $order, array $data): Order
     {
         if ($order->status !== Order::CANCEL) {
+
+            if (!empty($data['neighborhood_id'])) {
+                $neighborhood = Neighborhood::find($data['neighborhood_id']);
+                $data['district_id'] = $neighborhood?->district_id;
+                $data['city_id'] = $neighborhood?->city_id;
+            }
+
             $order->update([
                 'customer_id' => $order->customer_id,
                 'city_id' => $data['city_id'] ?? null,

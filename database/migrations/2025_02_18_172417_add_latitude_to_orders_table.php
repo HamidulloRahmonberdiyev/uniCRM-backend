@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->decimal('latitude', 10, 6)->after('source_id');
-            $table->decimal('longitude', 10, 6)->after('latitude');
+            $table->decimal('latitude', 10, 6)->nullable()->after('source_id');
+            $table->decimal('longitude', 10, 6)->nullable()->after('latitude');
             $table->dropColumn('location');
         });
     }

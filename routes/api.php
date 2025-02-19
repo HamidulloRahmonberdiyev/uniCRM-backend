@@ -49,6 +49,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::delete('bottles/delete/{bottle}', [BottleController::class, 'destroy']);
 
         Route::get('prices', [PriceController::class, 'index']);
+        Route::get('prices/show', [PriceController::class, 'show']);
         Route::post('prices/store', [PriceController::class, 'store']);
         Route::put('prices/update/{price}', [PriceController::class, 'update']);
         Route::delete('prices/delete/{price}', [PriceController::class, 'destroy']);

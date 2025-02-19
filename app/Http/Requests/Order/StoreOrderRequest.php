@@ -25,7 +25,8 @@ class StoreOrderRequest extends FormRequest
             'date' => 'nullable|date',
             'address' => 'nullable|string|max:255',
             'note' => 'nullable|string|max:500',
-            'location' => 'nullable|string',
+            'latitude' => 'nullable|string',
+            'longitude' => 'nullable|string',
             'status' => 'nullable|boolean',
             'source_id' => 'nullable|integer|exists:sources,id',
         ];

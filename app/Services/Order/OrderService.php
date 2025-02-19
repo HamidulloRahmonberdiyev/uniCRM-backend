@@ -110,7 +110,7 @@ class OrderService
     public function changeStatusOrder(Order $order, $data)
     {
         return $order->update([
-            'supplier_id' => auth()->user()->isSupplier() && $data == Order::DONE ? Auth::id() : null,
+            // 'supplier_id' => auth()->user()->isSupplier() && $data == Order::DONE ? Auth::id() : null,
             'status' => $data
         ]);
     }

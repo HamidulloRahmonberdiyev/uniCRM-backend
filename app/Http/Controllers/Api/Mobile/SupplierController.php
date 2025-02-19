@@ -12,11 +12,9 @@ class SupplierController extends Controller
 {
     public function supplierStats()
     {
-        $today = Carbon::today();
+        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id());
 
-        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id())->whereDate('date', $today)->count();
-
-        $deliveredCount = Order::where('status', Order::DONE)->where('supplier_id', Auth::id())->whereDate('date', $today)->count();
+        $deliveredCount = Order::where('status', Order::DONE)->where('supplier_id', Auth::id());
 
         return [
             'active_orders' => $activesCount,

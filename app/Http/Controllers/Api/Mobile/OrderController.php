@@ -30,6 +30,16 @@ class OrderController extends Controller
         return $this->successResponse($order);
     }
 
+    public function activateOrder(Order $order)
+    {
+        $order->update([
+            'supplier_id' => null,
+        ]);
+
+        return $this->successResponse($order);
+    }
+
+
     public function activeOrders(Request $request)
     {
         $validated = $request->validate([

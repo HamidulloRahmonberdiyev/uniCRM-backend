@@ -129,7 +129,7 @@ class CustomerController extends Controller
         return $this->successResponse($stats);
     }
 
-    public function searchByPhoneNumber(Request $request)
+    public function findByPhoneNumber(Request $request)
     {
         $request->validate([
             'phone' => 'required|string',

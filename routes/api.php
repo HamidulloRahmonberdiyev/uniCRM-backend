@@ -102,6 +102,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::prefix('orders')->group(function () {
             Route::get('actives', [MobileOrderController::class, 'activeOrders']);
             Route::get('booked', [MobileOrderController::class, 'bookedOrders']);
+            Route::get('history', [MobileOrderController::class, 'orderHistory']);
             Route::put('booking/{order}', [MobileOrderController::class, 'bookingOrder']);
         });
     });

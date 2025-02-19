@@ -46,6 +46,7 @@ class OrderService
                 ) THEN 2
                 ELSE 3
             END)", ["%{$phone}%", "%{$phone}%", "%{$name}%", "%{$name}%", "%{$name}%"])
+            ->orderBy('created_at', 'asc')
             ->get();
 
         return $orders;
@@ -56,6 +57,17 @@ class OrderService
         $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
             ->where('supplier_id', Auth::id())
             ->where('status', Order::ACTIVE)
+            ->get();
+
+        return $orders;
+    }
+
+    public function getOrderHistory()
+    {
+        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+            ->whereBetween('created_at', [now()->subDays(30), now()])
+            ->where('supplier_id', Auth::id())
+            ->where('status', Order::DONE)
             ->get();
 
         return $orders;

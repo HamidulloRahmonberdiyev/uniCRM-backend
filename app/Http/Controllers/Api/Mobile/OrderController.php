@@ -47,4 +47,11 @@ class OrderController extends Controller
 
         return OrderDetailResource::collection($orders);
     }
+
+    public function orderHistory()
+    {
+        $orders = $this->mobileOrderService->getOrderHistory();
+
+        return OrderDetailResource::collection($orders);
+    }
 }

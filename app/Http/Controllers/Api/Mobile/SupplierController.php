@@ -12,9 +12,9 @@ class SupplierController extends Controller
 {
     public function supplierStats()
     {
-        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id());
+        $activesCount = Order::where('status', Order::ACTIVE)->where('supplier_id', Auth::id())->count();
 
-        $deliveredCount = Order::where('status', Order::DONE)->where('supplier_id', Auth::id());
+        $deliveredCount = Order::where('status', Order::DONE)->where('supplier_id', Auth::id())->count();
 
         return [
             'active_orders' => $activesCount,

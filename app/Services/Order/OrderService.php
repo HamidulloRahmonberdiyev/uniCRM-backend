@@ -20,7 +20,7 @@ class OrderService
         ]);
 
         return Order::query()
-            ->select(['id', 'customer_id', 'user_id', 'company_id', 'source_id', 'date', 'status', 'sum', 'city_id', 'district_id', 'neighborhood_id', 'address', 'quantity', 'note', 'location'])
+            ->select(['id', 'customer_id', 'user_id', 'company_id', 'source_id', 'date', 'status', 'sum', 'city_id', 'district_id', 'neighborhood_id', 'address', 'quantity', 'note', 'latitude', 'longitude'])
             ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
             ->when($request->filled('start_date') && $request->filled('end_date'), function ($q) use ($request) {
                 $q->whereBetween('date', [$request->start_date, $request->end_date]);
@@ -94,7 +94,6 @@ class OrderService
                 'sum' => $data['sum'] ?? null,
                 'address' => $data['address'] ?? null,
                 'note' => $data['note'] ?? null,
-                'location' => $data['location'] ?? null,
                 'status' => $data['status'],
             ]);
         }

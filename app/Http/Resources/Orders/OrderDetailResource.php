@@ -24,7 +24,7 @@ class OrderDetailResource extends JsonResource
             'quantity' => $this->quantity,
             'sum' => $this->sum ?? null,
             'address' => $this->address,
-            'lotitude' => $this->lotitude,
+            'latitude' => $this->latitude,
             'longitude' => $this->longitude,
             'status' => $this->status,
             'created_at' => formatDateTime($this->created_at),

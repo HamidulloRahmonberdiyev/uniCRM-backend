@@ -2,7 +2,10 @@
 
 namespace App\Services\Customer;
 
+use App\Models\City;
 use App\Models\Customer;
+use App\Models\District;
+use App\Models\Neighborhood;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +45,31 @@ class CustomerService
     public function createCustomer(array $data): Customer
     {
         return DB::transaction(function () use ($data) {
+
+            if (!empty($data['customer_detail']['neighborhood_id'])) {
+                $neighborhood = Neighborhood::with('district.city.region')
+                    ->find($data['customer_detail']['neighborhood_id']);
+
+                if ($neighborhood) {
+                    $data['customer_detail']['district_id'] = $neighborhood->district_id;
+                    $data['customer_detail']['city_id'] = $neighborhood->district->city_id;
+                    $data['customer_detail']['region_id'] = $neighborhood->district->city->region_id;
+                }
+            } elseif (!empty($data['customer_detail']['district_id'])) {
+                $district = District::with('city.region')->find($data['customer_detail']['district_id']);
+
+                if ($district) {
+                    $data['customer_detail']['city_id'] = $district->city_id;
+                    $data['customer_detail']['region_id'] = $district->city->region_id;
+                }
+            } elseif (!empty($data['customer_detail']['city_id'])) {
+                $city = City::with('region')->find($data['customer_detail']['city_id']);
+
+                if ($city) {
+                    $data['customer_detail']['region_id'] = $city->region_id;
+                }
+            }
+
             $customer = Customer::create([
                 'user_id'      => Auth::id(),
                 'company_id'   => 1,
@@ -71,13 +99,38 @@ class CustomerService
     public function updateCustomer(Customer $customer, array $data): Customer
     {
         return DB::transaction(function () use ($customer, $data) {
+
+            if (!empty($data['customer_detail']['neighborhood_id'])) {
+                $neighborhood = Neighborhood::with('district.city.region')
+                    ->find($data['customer_detail']['neighborhood_id']);
+
+                if ($neighborhood) {
+                    $data['customer_detail']['district_id'] = $neighborhood->district_id;
+                    $data['customer_detail']['city_id'] = $neighborhood->district->city_id;
+                    $data['customer_detail']['region_id'] = $neighborhood->district->city->region_id;
+                }
+            } elseif (!empty($data['customer_detail']['district_id'])) {
+                $district = District::with('city.region')->find($data['customer_detail']['district_id']);
+
+                if ($district) {
+                    $data['customer_detail']['city_id'] = $district->city_id;
+                    $data['customer_detail']['region_id'] = $district->city->region_id;
+                }
+            } elseif (!empty($data['customer_detail']['city_id'])) {
+                $city = City::with('region')->find($data['customer_detail']['city_id']);
+
+                if ($city) {
+                    $data['customer_detail']['region_id'] = $city->region_id;
+                }
+            }
+
             $customer->update([
                 'first_name'   => $data['first_name'] ?? $customer->first_name,
                 'last_name'    => $data['last_name'] ?? $customer->last_name,
                 'middle_name'  => $data['middle_name'] ?? $customer->middle_name,
                 'date_of_birth' => $data['date_of_birth'] ?? $customer->date_of_birth,
-                'phone'        => $data['phone'] ?? $customer->phone,
-                'phone2'       => $data['phone2'] ?? $customer->phone2,
+                'phone'        => sanitizePhone($data['phone2']) ?? $customer->phone,
+                'phone2'       => sanitizePhone($data['phone2']) ?? $customer->phone2,
                 'status'       => $data['status'] ?? $customer->status,
             ]);
 

@@ -50,6 +50,6 @@ class CustomerDetail extends Model
 
     public function neighborhood(): BelongsTo
     {
-        return $this->belongsTo(District::class);
+        return $this->belongsTo(Neighborhood::class);
     }
 }

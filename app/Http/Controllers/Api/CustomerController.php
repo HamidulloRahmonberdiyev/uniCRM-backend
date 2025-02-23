@@ -56,7 +56,9 @@ class CustomerController extends Controller
     {
         $customer = $this->customerService->updateCustomer($customer, $request->validated());
 
-        return new CustomerResource($customer);
+        return new CustomerResource(
+            $customer->load('customerDetail.city', 'customerDetail.district', 'customerDetail.neighborhood')
+        );
     }
 
     public function destroy(Customer $customer)

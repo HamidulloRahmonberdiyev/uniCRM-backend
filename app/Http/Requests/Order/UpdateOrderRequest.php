@@ -67,11 +67,18 @@ class UpdateOrderRequest extends FormRequest
 
     protected function failedValidation(Validator $validator)
     {
+        $errors = $validator->errors()->toArray();
+
+        $formattedErrors = [];
+        foreach ($errors as $field => $messages) {
+            $formattedErrors[$field] = $messages[0];
+        }
+
         throw new HttpResponseException(
             response()->json([
                 'success' => false,
                 'message' => 'Validatsiya xatosi',
-                'errors' => $validator->errors()
+                'errors' => $formattedErrors
             ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
         );
     }

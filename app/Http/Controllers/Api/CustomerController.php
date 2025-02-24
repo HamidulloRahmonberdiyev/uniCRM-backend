@@ -70,49 +70,11 @@ class CustomerController extends Controller
 
     public function search(Request $request)
     {
-        $nameQuery = $request->input('name');
-        $phoneQuery = $request->input('phone');
+        $validated = $request->validate(['name_or_phone' => 'nullable|string']);
 
-        $customers = Customer::query();
+        $customers = $this->customerService->searchCustomer($validated);
 
-        if ($nameQuery) {
-            $customers->where(function ($q) use ($nameQuery) {
-                $q->where('first_name', 'LIKE', "%{$nameQuery}%")
-                    ->orWhere('last_name', 'LIKE', "%{$nameQuery}%")
-                    ->orWhere('middle_name', 'LIKE', "%{$nameQuery}%");
-            });
-        }
-
-        if ($phoneQuery) {
-            $customers->where(function ($q) use ($phoneQuery) {
-                $q->where('phone', 'LIKE', "%{$phoneQuery}%")
-                    ->orWhere('phone2', 'LIKE', "%{$phoneQuery}%");
-            });
-        }
-
-        $customers->orderByRaw(
-            "(CASE 
-                WHEN first_name LIKE ? THEN 5
-                WHEN last_name LIKE ? THEN 4
-                WHEN middle_name LIKE ? THEN 3
-                WHEN phone LIKE ? THEN 2
-                WHEN phone2 LIKE ? THEN 1
-                ELSE 0
-            END) DESC",
-            [
-                "{$nameQuery}%",
-                "{$nameQuery}%",
-                "{$nameQuery}%",
-                "{$phoneQuery}%",
-                "{$phoneQuery}%"
-            ]
-        );
-
-        $customers = $customers->limit(10)->get()->map(function ($customer) {
-            return new CustomerResource($customer);
-        });
-
-        return $this->successResponse($customers);
+        return $this->successResponse(CustomerResource::collection($customers));
     }
 
     public function order_history(Request $request, Customer $customer)

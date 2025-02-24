@@ -53,15 +53,14 @@ class RegionController extends Controller
         }
 
         if ($request->has('city_id')) {
-            $city = City::with(['districts', 'districts.neighborhoods'])->find($request->city_id);
+            $city = City::with(['neighborhoods'])->find($request->city_id);
             if (!$city) {
                 return response()->json(['message' => 'City not found'], 404);
             }
             return response()->json([
                 'city' => new CityResource($city),
-                'districts' => DistrictResource::collection($city->districts),
                 'neighborhoods' => NeighborhoodResource::collection(
-                    $city->districts->flatMap->neighborhoods
+                    $city->neighborhoods
                 ),
             ]);
         }

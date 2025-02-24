@@ -3,6 +3,9 @@
 namespace App\Http\Requests\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Contracts\Validation\Validator;
 
 class StoreOrderRequest extends FormRequest
 {
@@ -30,5 +33,57 @@ class StoreOrderRequest extends FormRequest
             'status' => 'nullable|boolean',
             'source_id' => 'nullable|integer|exists:sources,id',
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'customer_id.required' => 'Mijozni tanlash majburiy.',
+            'customer_id.exists' => 'Berilgan mijoz mavjud emas.',
+
+            'user_id.exists' => 'Berilgan foydalanuvchi mavjud emas.',
+
+            'company_id.exists' => 'Berilgan kompaniya mavjud emas.',
+
+            'city_id.exists' => 'Berilgan shahar mavjud emas.',
+
+            'district_id.exists' => 'Berilgan tuman mavjud emas.',
+
+            'neighborhood_id.exists' => 'Berilgan mahalla mavjud emas.',
+
+            'quantity.required' => 'Miqdor kiritish majburiy.',
+            'quantity.integer' => 'Miqdor son bo\'lishi kerak.',
+            'quantity.min' => 'Miqdor kamida 1 bo\'lishi kerak.',
+
+            'sum.numeric' => 'Summa raqam bo\'lishi kerak.',
+            'sum.min' => 'Summa manfiy bo\'lishi mumkin emas.',
+
+            'date.date' => 'Sana noto\'g\'ri formatda.',
+
+            'address.string' => 'Manzil faqat matn bo\'lishi kerak.',
+            'address.max' => 'Manzil uzunligi 255 belgidan oshmasligi kerak.',
+
+            'note.string' => 'Izoh faqat matn bo\'lishi kerak.',
+            'note.max' => 'Izoh uzunligi 500 belgidan oshmasligi kerak.',
+
+            'latitude.string' => 'Kenglik faqat matn bo\'lishi kerak.',
+
+            'longitude.string' => 'Uzunlik faqat matn bo\'lishi kerak.',
+
+            'status.boolean' => 'Holat faqat boolean (ha yoki yo\'q) bo\'lishi kerak.',
+
+            'source_id.exists' => 'Berilgan manba mavjud emas.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Validatsiya xatosi',
+                'errors' => $validator->errors()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+        );
     }
 }

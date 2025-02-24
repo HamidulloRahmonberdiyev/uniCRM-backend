@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\Customer;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\JsonResponse;
 
 class StoreCustomerRequest extends FormRequest
 {
@@ -31,5 +34,61 @@ class StoreCustomerRequest extends FormRequest
             'customer_detail.neighborhood_id' => 'nullable|integer|exists:neighborhoods,id',
             'customer_detail.home' => 'nullable|string|max:255',
         ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'user_id.exists' => 'Foydalanuvchi topilmadi.',
+
+            'company_id.exists' => 'Kompaniya topilmadi.',
+
+            'first_name.required' => 'Mijoz ismini kiriting.',
+            'first_name.string' => 'Ism faqat matn bo\'lishi kerak.',
+            'first_name.max' => 'Ism 255 belgidan oshmasligi kerak.',
+
+            'last_name.string' => 'Familiya faqat matn bo\'lishi kerak.',
+            'last_name.max' => 'Familiya 255 belgidan oshmasligi kerak.',
+
+            'middle_name.string' => 'Otasining ismi faqat matn bo\'lishi kerak.',
+            'middle_name.max' => 'Otasining ismi 255 belgidan oshmasligi kerak.',
+
+            'date_of_birth.date' => 'Tug\'ilgan sana to\'g\'ri formatda bo\'lishi kerak.',
+
+            'phone.required' => 'Telefon raqami majburiy.',
+            'phone.string' => 'Telefon raqami faqat matn bo\'lishi kerak.',
+            'phone.max' => 'Telefon raqami 17 belgidan oshmasligi kerak.',
+            'phone.unique' => 'Bu telefon raqami allaqachon ro\'yxatdan o\'tgan.',
+
+            'phone2.string' => 'Ikkinchi telefon raqami faqat matn bo\'lishi kerak.',
+            'phone2.max' => 'Ikkinchi telefon raqami 17 belgidan oshmasligi kerak.',
+            'phone2.unique' => 'Bu ikkinchi telefon raqami allaqachon ro\'yxatdan o\'tgan.',
+
+            'status.integer' => 'Holat faqat butun son bo\'lishi kerak.',
+
+            'customer_detail.array' => 'Mijoz tafsilotlari massiv bo\'lishi kerak.',
+
+            'customer_detail.region_id.exists' => 'Viloyat topilmadi.',
+
+            'customer_detail.city_id.exists' => 'Shahar topilmadi.',
+
+            'customer_detail.district_id.exists' => 'Tuman topilmadi.',
+
+            'customer_detail.neighborhood_id.exists' => 'Mahalla topilmadi.',
+
+            'customer_detail.home.string' => 'Uy manzili faqat matn bo\'lishi kerak.',
+            'customer_detail.home.max' => 'Uy manzili 255 belgidan oshmasligi kerak.',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Validatsiya xatosi',
+                'errors' => $validator->errors()
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY)
+        );
     }
 }

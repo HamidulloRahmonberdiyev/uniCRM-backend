@@ -184,4 +184,39 @@ class CustomerService
 
         return $locationData;
     }
+
+    public function searchCustomer(array $data)
+    {
+        $nameOrPhone = !empty($data['name_or_phone']) ? extractNameAndPhone($data['name_or_phone']) : ['name' => '', 'phone' => ''];
+        $name = $nameOrPhone['name'] ?? '';
+        $phone = $nameOrPhone['phone'] ?? '';
+
+        $query = Customer::query();
+
+        if ($name || $phone) {
+            $query->where(function ($q) use ($name, $phone) {
+                if ($name) {
+                    $q->where('first_name', 'LIKE', "%{$name}%")
+                        ->orWhere('last_name', 'LIKE', "%{$name}%")
+                        ->orWhere('middle_name', 'LIKE', "%{$name}%");
+                }
+                if ($phone) {
+                    $q->where('phone', 'LIKE', "%{$phone}%")
+                        ->orWhere('phone2', 'LIKE', "%{$phone}%");
+                }
+            });
+        }
+
+        return $query->orderByRaw(
+            "(CASE 
+            WHEN first_name LIKE ? THEN 5
+            WHEN last_name LIKE ? THEN 4
+            WHEN middle_name LIKE ? THEN 3
+            WHEN phone LIKE ? THEN 2
+            WHEN phone2 LIKE ? THEN 1
+            ELSE 0
+         END) DESC",
+            ["{$name}%", "{$name}%", "{$name}%", "{$phone}%", "{$phone}%"]
+        )->limit(20)->get();
+    }
 }

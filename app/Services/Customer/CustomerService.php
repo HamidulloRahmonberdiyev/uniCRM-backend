@@ -85,13 +85,13 @@ class CustomerService
             }
 
             $customer->update([
-                'first_name'   => $data['first_name'] ?? $customer->first_name,
-                'last_name'    => $data['last_name'] ?? $customer->last_name,
-                'middle_name'  => $data['middle_name'] ?? $customer->middle_name,
+                'first_name'    => $data['first_name'] ?? $customer->first_name,
+                'last_name'     => $data['last_name'] ?? $customer->last_name,
+                'middle_name'   => $data['middle_name'] ?? $customer->middle_name,
                 'date_of_birth' => $data['date_of_birth'] ?? $customer->date_of_birth,
-                'phone'        => sanitizePhone($data['phone']) ?? $customer->phone,
-                'phone2'       => sanitizePhone($data['phone2']) ?? $customer->phone2,
-                'status'       => $data['status'] ?? $customer->status,
+                'phone'         => sanitizePhone($data['phone']) ?? $customer->phone,
+                'phone2'        => isset($data['phone2']) ? sanitizePhone($data['phone2']) : $customer->phone2,
+                'status'        => $data['status'] ?? $customer->status,
             ]);
 
             if (!empty($data['customer_detail'])) {

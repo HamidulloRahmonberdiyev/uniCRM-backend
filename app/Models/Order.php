@@ -57,7 +57,7 @@ class Order extends Model
 
         static::created(function ($order) {
             if ($order->customer) {
-                $order->customer->update(['type_id' => CustomerType::ACTIVE]);
+                $order->customer->update(['type_id' => CustomerType::ACTIVE->value]);
             }
         });
     }

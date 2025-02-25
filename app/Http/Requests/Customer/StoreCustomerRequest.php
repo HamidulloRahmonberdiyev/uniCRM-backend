@@ -14,6 +14,21 @@ class StoreCustomerRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => sanitizePhone($this->phone),
+            ]);
+        }
+
+        if ($this->has('phone2')) {
+            $this->merge([
+                'phone2' => sanitizePhone($this->phone2),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         return [
@@ -23,8 +38,8 @@ class StoreCustomerRequest extends FormRequest
             'last_name' => 'nullable|string|max:255',
             'middle_name' => 'nullable|string|max:255',
             'date_of_birth' => 'nullable|date',
-            'phone' => 'required|string|max:17|unique:customers,phone',
-            'phone2' => 'nullable|string|max:17|unique:customers,phone2',
+            'phone' => 'required|string|max:17|unique:customers,phone,phone2',
+            'phone2' => 'nullable|string|max:17|unique:customers,phone,phone2',
             'status' => 'nullable|integer',
 
             'customer_detail' => 'nullable|array',
@@ -62,7 +77,7 @@ class StoreCustomerRequest extends FormRequest
 
             'phone2.string' => 'Ikkinchi telefon raqami faqat matn bo\'lishi kerak.',
             'phone2.max' => 'Ikkinchi telefon raqami 17 belgidan oshmasligi kerak.',
-            'phone2.unique' => 'Bu ikkinchi telefon raqami allaqachon ro\'yxatdan o\'tgan.',
+            'phone2.unique' => 'Bu telefon raqami allaqachon ro\'yxatdan o\'tgan.',
 
             'status.integer' => 'Holat faqat butun son bo\'lishi kerak.',
 

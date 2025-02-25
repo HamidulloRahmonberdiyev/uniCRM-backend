@@ -15,6 +15,21 @@ class UpdateCustomerRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation()
+    {
+        if ($this->has('phone')) {
+            $this->merge([
+                'phone' => sanitizePhone($this->phone),
+            ]);
+        }
+
+        if ($this->has('phone2')) {
+            $this->merge([
+                'phone2' => sanitizePhone($this->phone2),
+            ]);
+        }
+    }
+
     public function rules(): array
     {
         $customerId = $this->route('customer');
@@ -28,11 +43,13 @@ class UpdateCustomerRequest extends FormRequest
                 'string',
                 'max:17',
                 Rule::unique('customers', 'phone')->ignore($customerId),
+                Rule::unique('customers', 'phone2')->ignore($customerId),
             ],
             'phone2' => [
                 'nullable',
                 'string',
                 'max:17',
+                Rule::unique('customers', 'phone')->ignore($customerId),
                 Rule::unique('customers', 'phone2')->ignore($customerId),
             ],
             'status' => 'sometimes|integer',
@@ -71,7 +88,7 @@ class UpdateCustomerRequest extends FormRequest
 
             'phone2.string' => 'Ikkinchi telefon raqami faqat matn bo\'lishi kerak.',
             'phone2.max' => 'Ikkinchi telefon raqami uzunligi 17 belgidan oshmasligi kerak.',
-            'phone2.unique' => 'Bu ikkinchi telefon raqami allaqachon ro\'yxatga olingan.',
+            'phone2.unique' => 'Bu telefon raqami allaqachon ro\'yxatga olingan.',
 
             'status.sometimes' => 'Holatni kiritish majburiy emas, lekin agar kiritilsa, u faqat son bo\'lishi kerak.',
             'status.integer' => 'Holat faqat son bo\'lishi kerak.',

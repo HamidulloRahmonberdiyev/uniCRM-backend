@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\CustomerType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -48,6 +49,17 @@ class Order extends Model
             'note' => 'string',
             'status' => 'integer',
         ];
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($order) {
+            if ($order->customer) {
+                $order->customer->update(['type_id' => CustomerType::ACTIVE]);
+            }
+        });
     }
 
     public function customer(): BelongsTo

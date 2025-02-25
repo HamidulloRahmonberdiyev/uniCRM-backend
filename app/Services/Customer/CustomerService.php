@@ -118,15 +118,15 @@ class CustomerService
 
     public function getOrderHistory(Customer $customer, array $data)
     {
-        $startDate = Carbon::parse($data['start_date'])->startOfDay();
-        $endDate = Carbon::parse($data['end_date'])->startOfDay();
-
         $query = $customer->orders();
 
-        if ($startDate) {
+        if (!empty($data['start_date'])) {
+            $startDate = Carbon::parse($data['start_date'])->startOfDay();
             $query->where('date', '>=', $startDate);
         }
-        if ($endDate) {
+
+        if (!empty($data['end_date'])) {
+            $endDate = Carbon::parse($data['end_date'])->endOfDay();
             $query->where('date', '<=', $endDate);
         }
 

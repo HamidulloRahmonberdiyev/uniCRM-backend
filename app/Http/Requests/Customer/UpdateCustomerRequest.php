@@ -32,25 +32,30 @@ class UpdateCustomerRequest extends FormRequest
 
     public function rules(): array
     {
-        $customerId = $this->route('customer');
+        $customer = $this->route('customer');
+
         return [
             'first_name' => 'sometimes|string|max:255',
             'last_name' => 'sometimes|string|max:255',
             'middle_name' => 'sometimes|string|max:255',
             'date_of_birth' => 'sometimes|date',
             'phone' => [
-                'required',
+                'sometimes',
                 'string',
                 'max:17',
-                Rule::unique('customers', 'phone')->ignore($customerId),
-                Rule::unique('customers', 'phone2')->ignore($customerId),
+                Rule::unique('customers')->ignore($customer->id)->where(function ($query) {
+                    return $query->where('phone', $this->phone)
+                        ->orWhere('phone2', $this->phone);
+                }),
             ],
             'phone2' => [
                 'nullable',
                 'string',
                 'max:17',
-                Rule::unique('customers', 'phone')->ignore($customerId),
-                Rule::unique('customers', 'phone2')->ignore($customerId),
+                Rule::unique('customers')->ignore($customer->id)->where(function ($query) {
+                    return $query->where('phone', $this->phone2)
+                        ->orWhere('phone2', $this->phone2);
+                }),
             ],
             'status' => 'sometimes|integer',
 

@@ -19,7 +19,6 @@ class OrderResource extends JsonResource
                 'phone2' => formatPhone($this->customer->phone2),
             ] : null,
             'user' => $this->user->name,
-            'city' => $this->city ? new CityResource($this->city) : null,
             'district' => $this->district ? new DistrictResource($this->district) : null,
             'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
             'quantity' => $this->quantity,

@@ -6,38 +6,32 @@ use App\Http\Resources\CityResource;
 use App\Http\Resources\DistrictResource;
 use App\Http\Resources\NeighborhoodResource;
 use App\Http\Resources\RegionResource;
-use App\Models\City;
 use App\Models\District;
 use App\Models\Neighborhood;
 use App\Models\Region;
+use App\Traits\ApiJsonResponceTrait;
 
 class LocationService
 {
-    public function getLocationData(array $data)
+    use ApiJsonResponceTrait;
+
+    public function getLocations($request)
     {
-        if ($data['region_id']) {
-            return $this->getDataByRegion($data['region_id']);
+        if ($request->has('region_id')) {
+            return $this->getRegionData($request->region_id);
         }
 
-        if ($data['city_id']) {
-            return $this->getDataByCity($data['city_id']);
+        if ($request->has('district_id')) {
+            return $this->getDistrictData($request->district_id);
         }
 
-        if ($data['district_id']) {
-            return $this->getDataByDistrict($data['district_id']);
-        }
-
-        return $this->getAllLocationData();
+        return $this->getAllLocations();
     }
 
-    private function getDataByRegion(int $regionId): array
+    private function getRegionData($regionId)
     {
         $region = Region::where('status', Region::ACTIVE)
             ->with([
-                'cities' => function ($query) {
-                    $query->where('status', City::ACTIVE)
-                        ->select('id', 'name', 'region_id');
-                },
                 'districts' => function ($query) {
                     $query->where('status', District::ACTIVE)
                         ->select('id', 'name', 'region_id')
@@ -51,59 +45,19 @@ class LocationService
             ->find($regionId);
 
         if (!$region) {
-            return [
-                'status' => 404,
-                'message' => 'Region not found'
-            ];
+            return $this->errorResponse('Region not found', 404);
         }
 
-        return [
-            'status' => 200,
-            'data' => [
-                'region' => new RegionResource($region),
-                'cities' => CityResource::collection($region->cities),
-                'districts' => DistrictResource::collection($region->districts),
-                'neighborhoods' => NeighborhoodResource::collection(
-                    $region->districts->flatMap->neighborhoods
-                ),
-            ]
-        ];
+        return response()->json([
+            'region' => new RegionResource($region),
+            'districts' => DistrictResource::collection($region->districts),
+            'neighborhoods' => NeighborhoodResource::collection(
+                $region->districts->flatMap->neighborhoods
+            ),
+        ]);
     }
 
-    private function getDataByCity(int $cityId): array
-    {
-        $city = City::where('status', City::ACTIVE)
-            ->with(['neighborhoods' => function ($query) {
-                $query->where('status', Neighborhood::ACTIVE)
-                    ->select('id', 'name', 'district_id', 'city_id');
-            }])
-            ->select('id', 'name')
-            ->find($cityId);
-
-        if (!$city) {
-            return [
-                'status' => 404,
-                'message' => 'City not found'
-            ];
-        }
-
-        $districts = District::where('status', District::ACTIVE)
-            ->select('id', 'name')
-            ->get();
-
-        return [
-            'status' => 200,
-            'data' => [
-                'city' => new CityResource($city),
-                'districts' => DistrictResource::collection($districts),
-                'neighborhoods' => NeighborhoodResource::collection(
-                    $city->neighborhoods
-                ),
-            ]
-        ];
-    }
-
-    private function getDataByDistrict(int $districtId): array
+    private function getDistrictData($districtId)
     {
         $district = District::where('status', District::ACTIVE)
             ->with(['neighborhoods' => function ($query) {
@@ -114,34 +68,19 @@ class LocationService
             ->find($districtId);
 
         if (!$district) {
-            return [
-                'status' => 404,
-                'message' => 'District not found'
-            ];
+            return $this->errorResponse('District not found', 404);
         }
 
-        $cities = City::where('status', City::ACTIVE)
-            ->select('id', 'name')
-            ->get();
-
-        return [
-            'status' => 200,
-            'data' => [
-                'district' => new DistrictResource($district),
-                'cities' => CityResource::collection($cities),
-                'neighborhoods' => NeighborhoodResource::collection($district->neighborhoods),
-            ]
-        ];
+        return response()->json([
+            'district' => new DistrictResource($district),
+            'neighborhoods' => NeighborhoodResource::collection($district->neighborhoods),
+        ]);
     }
 
-    private function getAllLocationData(): array
+    private function getAllLocations()
     {
         $regions = Region::where('status', Region::ACTIVE)
             ->select('id', 'name')
-            ->get();
-
-        $cities = City::where('status', City::ACTIVE)
-            ->select('id', 'name', 'region_id')
             ->get();
 
         $districts = District::where('status', District::ACTIVE)
@@ -152,14 +91,10 @@ class LocationService
             ->select('id', 'name', 'district_id', 'city_id')
             ->get();
 
-        return [
-            'status' => 200,
-            'data' => [
-                'regions' => RegionResource::collection($regions),
-                'cities' => CityResource::collection($cities),
-                'districts' => DistrictResource::collection($districts),
-                'neighborhoods' => NeighborhoodResource::collection($neighborhoods),
-            ]
-        ];
+        return response()->json([
+            'regions' => RegionResource::collection($regions),
+            'districts' => DistrictResource::collection($districts),
+            'neighborhoods' => NeighborhoodResource::collection($neighborhoods),
+        ]);
     }
 }

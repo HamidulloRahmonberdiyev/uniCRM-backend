@@ -13,7 +13,6 @@ class RegionDetailResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'status' => $this->status,
-            'cities' => $this->cities ? CityResource::collection($this->cities) : null,
             'districts' => $this->districts ? DistrictResource::collection($this->districts) : null,
         ];
     }

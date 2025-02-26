@@ -67,12 +67,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('districts/{district}', [DistrictController::class, 'show']);
         Route::post('districts/{district}/change-status', [DistrictController::class, 'change_status']);
 
-        Route::get('cities', [CityController::class, 'index']);
-        Route::get('cities/{city}', [CityController::class, 'show']);
-        Route::post('cities/store', [CityController::class, 'store']);
-        Route::put('cities/update/{city}', [CityController::class, 'update']);
-        Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
-        Route::post('cities/{city}/change-status', [CityController::class, 'change_status']);
+        // Route::get('cities', [CityController::class, 'index']);
+        // Route::get('cities/{city}', [CityController::class, 'show']);
+        // Route::post('cities/store', [CityController::class, 'store']);
+        // Route::put('cities/update/{city}', [CityController::class, 'update']);
+        // Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
+        // Route::post('cities/{city}/change-status', [CityController::class, 'change_status']);
     });
 
     Route::get('customers/find-phone', [CustomerController::class, 'findByPhoneNumber']);

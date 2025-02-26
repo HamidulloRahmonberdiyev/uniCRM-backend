@@ -18,7 +18,6 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'company_id' => 'sometimes|exists:companies,id',
-            'city_id' => 'sometimes|exists:cities,id',
             'district_id' => 'sometimes|exists:districts,id',
             'neighborhood_id' => 'sometimes|exists:neighborhoods,id',
             'quantity' => 'sometimes|integer|min:1',
@@ -36,8 +35,6 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'company_id.exists' => 'Berilgan kompaniya mavjud emas.',
-
-            'city_id.exists' => 'Berilgan shahar mavjud emas.',
 
             'district_id.exists' => 'Berilgan tuman mavjud emas.',
 

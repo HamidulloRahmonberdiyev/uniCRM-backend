@@ -44,7 +44,6 @@ class StoreCustomerRequest extends FormRequest
 
             'customer_detail' => 'nullable|array',
             'customer_detail.region_id' => 'nullable|integer|exists:regions,id',
-            'customer_detail.city_id' => 'nullable|integer|exists:cities,id',
             'customer_detail.district_id' => 'nullable|integer|exists:districts,id',
             'customer_detail.neighborhood_id' => 'nullable|integer|exists:neighborhoods,id',
             'customer_detail.home' => 'nullable|string|max:255',
@@ -84,8 +83,6 @@ class StoreCustomerRequest extends FormRequest
             'customer_detail.array' => 'Mijoz tafsilotlari massiv bo\'lishi kerak.',
 
             'customer_detail.region_id.exists' => 'Viloyat topilmadi.',
-
-            'customer_detail.city_id.exists' => 'Shahar topilmadi.',
 
             'customer_detail.district_id.exists' => 'Tuman topilmadi.',
 

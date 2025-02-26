@@ -28,11 +28,6 @@ class Region extends Model
         return $query->where('status', 1);
     }
 
-    public function cities(): HasMany
-    {
-        return $this->hasMany(City::class);
-    }
-
     public function districts(): HasMany
     {
         return $this->hasMany(District::class);

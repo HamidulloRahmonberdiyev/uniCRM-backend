@@ -34,11 +34,6 @@ class Neighborhood extends Model
         return $query->where('status', 1);
     }
 
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class);
-    }
-
     public function district(): BelongsTo
     {
         return $this->belongsTo(District::class);

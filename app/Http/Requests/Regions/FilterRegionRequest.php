@@ -16,7 +16,6 @@ class FilterRegionRequest extends FormRequest
         return [
             'region_id' => 'nullable|integer',
             'district_id' => 'nullable|integer',
-            'city_id' => 'nullable|integer',
         ];
     }
 }

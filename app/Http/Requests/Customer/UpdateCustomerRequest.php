@@ -61,7 +61,6 @@ class UpdateCustomerRequest extends FormRequest
 
             'customer_detail' => 'nullable|array',
             'customer_detail.region_id' => 'nullable|integer|exists:regions,id',
-            'customer_detail.city_id' => 'nullable|integer|exists:cities,id',
             'customer_detail.district_id' => 'nullable|integer|exists:districts,id',
             'customer_detail.neighborhood_id' => 'nullable|integer|exists:neighborhoods,id',
             'customer_detail.home' => 'nullable|string|max:255',
@@ -101,8 +100,6 @@ class UpdateCustomerRequest extends FormRequest
             'customer_detail.array' => 'Mijozning ma\'lumotlari to\'g\'ri formatda bo\'lishi kerak.',
 
             'customer_detail.region_id.exists' => 'Berilgan hudud mavjud emas.',
-
-            'customer_detail.city_id.exists' => 'Berilgan shahar mavjud emas.',
 
             'customer_detail.district_id.exists' => 'Berilgan tuman mavjud emas.',
 

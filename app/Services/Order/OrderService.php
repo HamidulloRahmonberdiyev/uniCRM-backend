@@ -39,7 +39,6 @@ class OrderService
             })
             ->with([
                 'customer:id,first_name,last_name,middle_name,phone,phone2',
-                'city:id,name',
                 'district:id,name',
                 'neighborhood:id,name',
                 'source:id,name',
@@ -53,14 +52,12 @@ class OrderService
         if (!empty($data['neighborhood_id'])) {
             $neighborhood = Neighborhood::find($data['neighborhood_id']);
             $data['district_id'] = $neighborhood?->district_id;
-            $data['city_id'] = $neighborhood?->city_id;
         }
 
         return Order::create([
             'customer_id' => $data['customer_id'],
             'user_id' => Auth::id(),
             'company_id' => 1,
-            'city_id' => $data['city_id'] ?? null,
             'district_id' => $data['district_id'] ?? null,
             'neighborhood_id' => $data['neighborhood_id'] ?? null,
             'quantity' => $data['quantity'],
@@ -82,7 +79,6 @@ class OrderService
             if (!empty($data['neighborhood_id'])) {
                 $neighborhood = Neighborhood::find($data['neighborhood_id']);
                 $data['district_id'] = $neighborhood?->district_id;
-                $data['city_id'] = $neighborhood?->city_id;
             }
 
             $order->update([

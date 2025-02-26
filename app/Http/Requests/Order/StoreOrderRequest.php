@@ -20,7 +20,6 @@ class StoreOrderRequest extends FormRequest
             'customer_id' => 'required|exists:customers,id',
             'user_id' => 'nullable|exists:users,id',
             'company_id' => 'nullable|exists:companies,id',
-            'city_id' => 'nullable|exists:cities,id',
             'district_id' => 'nullable|exists:districts,id',
             'neighborhood_id' => 'nullable|exists:neighborhoods,id',
             'quantity' => 'required|integer|min:1',
@@ -44,8 +43,6 @@ class StoreOrderRequest extends FormRequest
             'user_id.exists' => 'Berilgan foydalanuvchi mavjud emas.',
 
             'company_id.exists' => 'Berilgan kompaniya mavjud emas.',
-
-            'city_id.exists' => 'Berilgan shahar mavjud emas.',
 
             'district_id.exists' => 'Berilgan tuman mavjud emas.',
 

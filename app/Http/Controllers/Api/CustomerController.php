@@ -48,7 +48,7 @@ class CustomerController extends Controller
     public function show(Customer $customer)
     {
         return new CustomerResource(
-            $customer->load('customerDetail.city', 'customerDetail.district', 'customerDetail.neighborhood')
+            $customer->load('customerDetail.district', 'customerDetail.neighborhood')
         );
     }
 
@@ -57,7 +57,7 @@ class CustomerController extends Controller
         $customer = $this->customerService->updateCustomer($customer, $request->validated());
 
         return new CustomerResource(
-            $customer->load('customerDetail.city', 'customerDetail.district', 'customerDetail.neighborhood')
+            $customer->load('customerDetail.district', 'customerDetail.neighborhood')
         );
     }
 

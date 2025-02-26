@@ -65,7 +65,6 @@ class CustomerService
             if (!empty($data['customer_detail'])) {
                 $customer->customerDetail()->create([
                     'region_id'      => $data['customer_detail']['region_id'] ?? null,
-                    'city_id'        => $data['customer_detail']['city_id'] ?? null,
                     'district_id'    => $data['customer_detail']['district_id'] ?? null,
                     'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? null,
                     'home'           => $data['customer_detail']['home'] ?? null,
@@ -99,7 +98,6 @@ class CustomerService
                     ['customer_id' => $customer->id],
                     [
                         'region_id'       => $data['customer_detail']['region_id'] ?? $customer->customerDetail->region_id ?? null,
-                        'city_id'         => $data['customer_detail']['city_id'] ?? $customer->customerDetail->city_id ?? null,
                         'district_id'     => $data['customer_detail']['district_id'] ?? $customer->customerDetail->district_id ?? null,
                         'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? $customer->customerDetail->neighborhood_id ?? null,
                         'home'            => $data['customer_detail']['home'] ?? $customer->customerDetail->home ?? null,
@@ -153,17 +151,14 @@ class CustomerService
     protected function getRegionIdFromLocation(array $locationData): array
     {
         if (!empty($locationData['neighborhood_id'])) {
-            $neighborhood = Neighborhood::with('district.region', 'city.region')
+            $neighborhood = Neighborhood::with('district.region')
                 ->find($locationData['neighborhood_id']);
 
             if ($neighborhood) {
                 $locationData['district_id'] = $neighborhood->district_id;
-                $locationData['city_id'] = $neighborhood->city_id;
 
                 if (!empty($neighborhood->district_id) && !empty($neighborhood->district->region_id)) {
                     $locationData['region_id'] = $neighborhood->district->region_id;
-                } elseif (!empty($neighborhood->city_id) && !empty($neighborhood->city->region_id)) {
-                    $locationData['region_id'] = $neighborhood->city->region_id;
                 }
             }
         }
@@ -172,13 +167,6 @@ class CustomerService
             $district = District::with('region')->find($locationData['district_id']);
             if ($district && !empty($district->region_id)) {
                 $locationData['region_id'] = $district->region_id;
-            }
-        }
-
-        if (empty($locationData['region_id']) && !empty($locationData['city_id'])) {
-            $city = City::with('region')->find($locationData['city_id']);
-            if ($city && !empty($city->region_id)) {
-                $locationData['region_id'] = $city->region_id;
             }
         }
 

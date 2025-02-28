@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Settings\DistrictController;
 use App\Http\Controllers\Api\Settings\PriceController;
 use App\Http\Controllers\Api\Settings\RegionController;
 use App\Http\Controllers\Api\Settings\SourceController;
+use App\Http\Controllers\Api\StatsController;
 use App\Http\Controllers\Auth\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -106,6 +107,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::put('booking/{order}', [MobileOrderController::class, 'bookingOrder']);
             Route::put('activate/{order}', [MobileOrderController::class, 'activateOrder']);
         });
+    });
+
+    Route::prefix('stats')->group(function () {
+        Route::get('monthly-orders', [StatsController::class, 'monthlyOrderChart']);
+        Route::get('customer-type', [StatsController::class, 'customerTypeChart']);
+        Route::get('order-source', [StatsController::class, 'orderSourceChart']);
+        Route::get('supplier-orders', [StatsController::class, 'supplierOrdersChart']);
     });
 
     Route::get('returneds', [ReturnedController::class, 'index']);

@@ -65,6 +65,33 @@ if (!function_exists('sanitizePhone')) {
     }
 }
 
+if (!function_exists('getUzbekMonth')) {
+    /**
+     * Inglizcha oy nomlarini o‘zbek tiliga tarjima qiladi.
+     *
+     * @param string $englishMonth Inglizcha oy nomi (masalan, "January").
+     * @return string O‘zbekcha oy nomi (masalan, "Yanvar").
+     */
+    function getUzbekMonth($englishMonth)
+    {
+        $months = [
+            'January' => 'Yanvar',
+            'February' => 'Fevral',
+            'March' => 'Mart',
+            'April' => 'Aprel',
+            'May' => 'May',
+            'June' => 'Iyun',
+            'July' => 'Iyul',
+            'August' => 'Avgust',
+            'September' => 'Sentyabr',
+            'October' => 'Oktabr',
+            'November' => 'Noyabr',
+            'December' => 'Dekabr'
+        ];
+        return $months[$englishMonth] ?? $englishMonth;
+    }
+}
+
 if (!function_exists('formatPhone')) {
     /** 
      * This function ensures the phone number is correctly formatted by:

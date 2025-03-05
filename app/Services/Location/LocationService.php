@@ -38,7 +38,7 @@ class LocationService
                         ->with(['neighborhoods' => function ($query) {
                             $query->where('status', Neighborhood::ACTIVE)
                                 ->whereHas('district', function ($query) {
-                                    $query->where('status', true);
+                                    $query->where('status', District::ACTIVE);
                                 })
                                 ->select('id', 'name', 'district_id');
                         }]);
@@ -92,7 +92,7 @@ class LocationService
 
         $neighborhoods = Neighborhood::where('status', Neighborhood::ACTIVE)
             ->whereHas('district', function ($query) {
-                $query->where('status', true);
+                $query->where('status', District::ACTIVE);
             })
             ->select('id', 'name', 'district_id', 'city_id')
             ->get();

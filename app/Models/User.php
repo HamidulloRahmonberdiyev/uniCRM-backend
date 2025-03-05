@@ -43,6 +43,13 @@ class User extends Authenticatable
         return $this->belongsToMany(Role::class, 'user_role');
     }
 
+    public function isSuperAdmin()
+    {
+        return $this->roles->contains(function ($value) {
+            return in_array($value->name, ['super admin']);
+        });
+    }
+
     public function isAdmin()
     {
         return $this->roles->contains(function ($value) {

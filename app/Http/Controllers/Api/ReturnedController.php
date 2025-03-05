@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Returned\StoreReturnedRequest;
+use App\Http\Requests\Returned\UpdateReturnedRequest;
 use App\Http\Resources\ReturnedResource;
 use App\Models\Returned;
 use App\Traits\ApiJsonResponceTrait;
@@ -21,13 +23,8 @@ class ReturnedController extends Controller
         return ReturnedResource::collection($returneds);
     }
 
-    public function store(Request $request)
+    public function store(StoreReturnedRequest $request)
     {
-        $request->validate([
-            'customer_id' => 'required|integer',
-            'quantity' => 'required|integer',
-        ]);
-
         try {
             $returned = Returned::create([
                 'user_id' => Auth::id(),
@@ -42,12 +39,8 @@ class ReturnedController extends Controller
         }
     }
 
-    public function update(Request $request, Returned $returned)
+    public function update(UpdateReturnedRequest $request, Returned $returned)
     {
-        $request->validate([
-            'quantity' => 'required|integer',
-        ]);
-
         try {
             $returned->update([
                 'quantity' => $request->quantity,

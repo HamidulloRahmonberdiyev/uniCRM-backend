@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Customer\FilterCustomerRequest;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
@@ -24,9 +25,9 @@ class CustomerController extends Controller
         $this->customerService = $customerService;
     }
 
-    public function index(Request $request)
+    public function index(FilterCustomerRequest $request)
     {
-        $customers = $this->customerService->getAllCustomers($request);
+        $customers = $this->customerService->getAllCustomers($request->validated());
 
         return $this->successResponse([
             'data' => CustomerResource::collection($customers),

@@ -13,26 +13,30 @@ use Illuminate\Support\Facades\DB;
 
 class CustomerService
 {
-    public function getAllCustomers(Request $request)
+    public function getAllCustomers(array $data)
     {
+        $nameOrPhone = !empty($data['name_or_phone']) ? extractNameAndPhone($data['name_or_phone']) : ['name' => '', 'phone' => ''];
+        $name = $nameOrPhone['name'] ?? '';
+        $phone = $nameOrPhone['phone'] ?? '';
+
         $query = Customer::where('status', Customer::ACTIVE);
 
-        if ($request->filled('type_id')) {
-            $query->where('type_id', $request->type_id);
+        if (isset($data['type_id']) && !empty($data['type_id'])) {
+            $query->where('type_id', $data['type_id']);
         }
 
-        if ($request->filled('name')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('first_name', 'LIKE', "%{$request->name}%")
-                    ->orWhere('last_name', 'LIKE', "%{$request->name}%")
-                    ->orWhere('middle_name', 'LIKE', "%{$request->name}%");
+        if ($name) {
+            $query->where(function ($q) use ($name) {
+                $q->where('first_name', 'LIKE', "%{$name}%")
+                    ->orWhere('last_name', 'LIKE', "%{$name}%")
+                    ->orWhere('middle_name', 'LIKE', "%{$name}%");
             });
         }
 
-        if ($request->filled('phone')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('phone', 'LIKE', "%{$request->phone}%")
-                    ->orWhere('phone2', 'LIKE', "%{$request->phone}%");
+        if ($phone) {
+            $query->where(function ($q) use ($phone) {
+                $q->where('phone', 'LIKE', "%{$phone}%")
+                    ->orWhere('phone2', 'LIKE', "%{$phone}%");
             });
         }
 

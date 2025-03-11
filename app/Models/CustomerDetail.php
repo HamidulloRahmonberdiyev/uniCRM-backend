@@ -14,6 +14,7 @@ class CustomerDetail extends Model
         'district_id',
         'neighborhood_id',
         'home',
+        'bottle_count',
     ];
 
     protected function casts(): array
@@ -25,6 +26,7 @@ class CustomerDetail extends Model
             'district_id' => 'integer',
             'neighborhood_id' => 'integer',
             'home' => 'string',
+            'bottle_count' => 'integer',
         ];
     }
 

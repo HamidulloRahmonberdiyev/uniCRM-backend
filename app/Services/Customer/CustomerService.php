@@ -68,6 +68,7 @@ class CustomerService
                     'district_id'    => $data['customer_detail']['district_id'] ?? null,
                     'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? null,
                     'home'           => $data['customer_detail']['home'] ?? null,
+                    'bottle_count'   => $data['customer_detail']['bottle_count'] ?? null,
                 ]);
             }
 
@@ -101,6 +102,7 @@ class CustomerService
                         'district_id'     => $data['customer_detail']['district_id'] ?? $customer->customerDetail->district_id ?? null,
                         'neighborhood_id' => $data['customer_detail']['neighborhood_id'] ?? $customer->customerDetail->neighborhood_id ?? null,
                         'home'            => $data['customer_detail']['home'] ?? $customer->customerDetail->home ?? null,
+                        'bottle_count'    => $data['customer_detail']['bottle_count'] ?? $customer->customerDetail->bottle_count ?? null,
                     ]
                 );
             }

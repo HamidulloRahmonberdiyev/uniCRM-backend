@@ -47,6 +47,7 @@ class StoreCustomerRequest extends FormRequest
             'customer_detail.district_id' => 'nullable|integer|exists:districts,id',
             'customer_detail.neighborhood_id' => 'nullable|integer|exists:neighborhoods,id',
             'customer_detail.home' => 'nullable|string|max:255',
+            'customer_detail.bottle_count' => 'nullable|integer',
         ];
     }
 
@@ -90,6 +91,8 @@ class StoreCustomerRequest extends FormRequest
 
             'customer_detail.home.string' => 'Uy manzili faqat matn bo\'lishi kerak.',
             'customer_detail.home.max' => 'Uy manzili 255 belgidan oshmasligi kerak.',
+
+            'customer_detail.bottle_count.integer' => 'Idish soni faqat butun son bo\'lishi kerak.',
         ];
     }
 

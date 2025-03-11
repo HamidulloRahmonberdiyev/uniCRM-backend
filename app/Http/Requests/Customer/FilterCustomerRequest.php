@@ -16,6 +16,8 @@ class FilterCustomerRequest extends FormRequest
         return [
             'name_or_phone' => 'nullable|string|max:255',
             'type_id' => 'nullable|integer|exists:customer_types,id',
+            'start_date' => 'nullable|date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ];
     }
 }

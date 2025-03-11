@@ -78,14 +78,9 @@ class CustomerController extends Controller
         return $this->successResponse(CustomerResource::collection($customers));
     }
 
-    public function order_history(Request $request, Customer $customer)
+    public function order_history(FilterCustomerRequest $request, Customer $customer)
     {
-        $validated = $request->validate([
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
-        ]);
-
-        $orders = $this->customerService->getOrderHistory($customer, $validated);
+        $orders = $this->customerService->getOrderHistory($customer, $request->validated());
 
         return OrderResource::collection($orders);
     }
@@ -98,9 +93,7 @@ class CustomerController extends Controller
 
     public function findByPhoneNumber(Request $request)
     {
-        $request->validate([
-            'phone' => 'required|string',
-        ]);
+        $request->validate(['phone' => 'required|string']);
 
         $sanitizedPhone = sanitizePhone($request->phone);
 

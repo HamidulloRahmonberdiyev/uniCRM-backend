@@ -14,6 +14,7 @@ class CustomerDetailResource extends JsonResource
             'district' => $this->district ? new DistrictResource($this->district) : null,
             'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
             'home' => $this->home,
+            'bottle_count' => $this->bottle_count,
         ];
     }
 }

@@ -191,22 +191,19 @@ class CustomerService
                         ->orWhere('middle_name', 'LIKE', "%{$name}%");
                 }
                 if ($phone) {
-                    $q->where('phone', 'LIKE', "%{$phone}%")
+                    $q->orWhere('phone', 'LIKE', "%{$phone}%")
                         ->orWhere('phone2', 'LIKE', "%{$phone}%");
                 }
             });
         }
 
-        return $query->orderByRaw(
-            "(CASE 
-            WHEN first_name LIKE ? THEN 5
-            WHEN last_name LIKE ? THEN 4
-            WHEN middle_name LIKE ? THEN 3
-            WHEN phone LIKE ? THEN 2
-            WHEN phone2 LIKE ? THEN 1
-            ELSE 0
-         END) DESC",
-            ["{$name}%", "{$name}%", "{$name}%", "{$phone}%", "{$phone}%"]
-        )->limit(20)->get();
+        return $query->orderByRaw("
+        CASE 
+            WHEN phone LIKE ? OR phone2 LIKE ? THEN 1
+            WHEN first_name LIKE ? OR last_name LIKE ? OR middle_name LIKE ? THEN 2
+            ELSE 3
+        END", ["%{$phone}%", "%{$phone}%", "%{$name}%", "%{$name}%", "%{$name}%"])
+            ->limit(20)
+            ->get();
     }
 }

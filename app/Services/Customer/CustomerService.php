@@ -187,8 +187,7 @@ class CustomerService
             $query->where(function ($q) use ($name, $phone) {
                 if ($name) {
                     $q->where('first_name', 'LIKE', "%{$name}%")
-                        ->orWhere('last_name', 'LIKE', "%{$name}%")
-                        ->orWhere('middle_name', 'LIKE', "%{$name}%");
+                        ->orWhere('last_name', 'LIKE', "%{$name}%");
                 }
                 if ($phone) {
                     $q->orWhere('phone', 'LIKE', "%{$phone}%")
@@ -197,12 +196,38 @@ class CustomerService
             });
         }
 
-        return $query->orderByRaw("
-        CASE 
-            WHEN phone LIKE ? OR phone2 LIKE ? THEN 1
-            WHEN first_name LIKE ? OR last_name LIKE ? OR middle_name LIKE ? THEN 2
-            ELSE 3
-        END", ["%{$phone}%", "%{$phone}%", "%{$name}%", "%{$name}%", "%{$name}%"])
+        return $query->orderByRaw(" 
+    CASE  
+        WHEN phone = ? OR phone2 = ? THEN 1 -- Exact phone match 
+        WHEN phone LIKE ? OR phone2 LIKE ? THEN 2 -- Phone starts with the pattern
+        WHEN phone LIKE ? OR phone2 LIKE ? THEN 3 -- Phone contains the pattern
+        WHEN first_name = ? OR last_name = ? THEN 4 -- Exact name match
+        WHEN first_name LIKE ? OR last_name LIKE ? THEN 5 -- Name starts with the pattern
+        WHEN first_name LIKE ? OR last_name LIKE ? THEN 6 -- Name contains the pattern
+        ELSE 7 
+    END, 
+    CASE  
+        WHEN (phone LIKE ? OR phone2 LIKE ?) AND (first_name LIKE ? OR last_name LIKE ?) THEN 1 -- Both phone and name match
+        ELSE 2 -- Single field match
+    END,
+    first_name ASC", [
+            $phone,
+            $phone,
+            $phone . '%',
+            $phone . '%',
+            '%' . $phone . '%',
+            '%' . $phone . '%',
+            $name,
+            $name,
+            $name . '%',
+            $name . '%',
+            '%' . $name . '%',
+            '%' . $name . '%',
+            '%' . $phone . '%',
+            '%' . $phone . '%',
+            '%' . $name . '%',
+            '%' . $name . '%'
+        ])
             ->limit(20)
             ->get();
     }

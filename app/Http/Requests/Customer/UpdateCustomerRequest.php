@@ -36,8 +36,8 @@ class UpdateCustomerRequest extends FormRequest
 
         return [
             'first_name' => 'sometimes|string|max:255',
-            'last_name' => 'sometimes|string|max:255',
-            'middle_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|nullable|string|max:255',
+            'middle_name' => 'sometimes|nullable|string|max:255',
             'date_of_birth' => 'sometimes|date',
             'phone' => [
                 'sometimes',

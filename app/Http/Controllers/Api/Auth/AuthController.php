@@ -33,7 +33,7 @@ class AuthController extends Controller
             $user = $this->authService->registerUser($request->validated());
 
             $accessToken = $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
-            $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(30))->plainTextToken;
+            $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(365))->plainTextToken;
 
             return response()->json([
                 'access_token' => $accessToken,
@@ -55,7 +55,7 @@ class AuthController extends Controller
         }
 
         $accessToken = $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
-        $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(30))->plainTextToken;
+        $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(365))->plainTextToken;
 
         return response()->json([
             'access_token' => $accessToken,

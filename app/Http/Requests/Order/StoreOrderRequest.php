@@ -29,7 +29,7 @@ class StoreOrderRequest extends FormRequest
             'note' => 'nullable|string|max:500',
             'latitude' => 'nullable|string',
             'longitude' => 'nullable|string',
-            'status' => 'nullable|boolean',
+            'status' => 'nullable|integer',
             'source_id' => 'nullable|integer|exists:sources,id',
         ];
     }

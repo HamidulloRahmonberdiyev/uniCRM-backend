@@ -15,12 +15,13 @@ class StoreUserRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'nullable|email|unique:users,email',
             'username' => 'required|string|unique:users,username',
             'phone' => 'required|string|unique:users,phone',
             'password' => 'required|string|min:8',
-            'roles' => 'sometimes|array',
+            'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,id',
+            'status' => 'nullable|boolean',
         ];
     }
 }

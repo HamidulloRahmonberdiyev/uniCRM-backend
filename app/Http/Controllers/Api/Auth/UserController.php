@@ -4,56 +4,47 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\StoreUserRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\UserResource;
+use App\Models\User;
+use App\Services\User\UserService;
+use App\Traits\ApiJsonResponceTrait;
 
 class UserController extends Controller
 {
+    use ApiJsonResponceTrait;
+
+    protected $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->userService = $userService;
+    }
+
     public function index()
     {
-        return response()->json(User::with('roles')->paginate(10));
+        $users = User::paginate(20);
+
+        return UserResource::collection($users);
     }
 
     public function store(StoreUserRequest $request)
     {
-        $request->password = Hash::make($validated['password']);
+        $user = $this->userService->createUser($request->validated());
 
-        $user = User::create($validated);
-
-        if (!empty($validated['roles'])) {
-            $user->roles()->sync($validated['roles']);
-        }
-
-        return response()->json($user->load('roles'), 201);
+        return new UserResource($user);
     }
 
     public function show(User $user)
     {
-        return response()->json($user->load('roles'));
+        return new UserResource($user);
     }
 
-    public function update(Request $request, User $user)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        $validated = $request->validate([
-            'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
-            'username' => 'sometimes|string|unique:users,username,' . $user->id,
-            'phone' => 'sometimes|string|unique:users,phone,' . $user->id,
-            'password' => 'sometimes|string|min:8',
-            'roles' => 'sometimes|array',
-            'roles.*' => 'exists:roles,id',
-        ]);
+        $user = $this->userService->updateUser($user, $request->validated());
 
-        if (isset($validated['password'])) {
-            $validated['password'] = Hash::make($validated['password']);
-        }
-
-        $user->update($validated);
-
-        if (isset($validated['roles'])) {
-            $user->roles()->sync($validated['roles']);
-        }
-
-        return response()->json($user->load('roles'));
+        return new UserResource($user);
     }
 
     public function destroy(User $user)
@@ -61,7 +52,6 @@ class UserController extends Controller
         $user->roles()->detach();
         $user->delete();
 
-        return response()->json(['message' => 'User deleted successfully']);
+        return $this->successResponse('User deleted successfully');
     }
-}
 }

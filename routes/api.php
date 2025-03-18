@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Auth\UserController;
 use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Mobile\OrderController as MobileOrderController;
@@ -68,12 +69,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('districts/{district}', [DistrictController::class, 'show']);
         Route::post('districts/{district}/change-status', [DistrictController::class, 'change_status']);
 
-        // Route::get('cities', [CityController::class, 'index']);
-        // Route::get('cities/{city}', [CityController::class, 'show']);
-        // Route::post('cities/store', [CityController::class, 'store']);
-        // Route::put('cities/update/{city}', [CityController::class, 'update']);
-        // Route::delete('cities/delete/{city}', [CityController::class, 'destroy']);
-        // Route::post('cities/{city}/change-status', [CityController::class, 'change_status']);
+        Route::prefix('users')->group(function () {
+            Route::get('/', [UserController::class, 'index']);
+            Route::get('/{user}', [UserController::class, 'show']);
+            Route::post('store', [UserController::class, 'store']);
+            Route::put('update/{user}', [UserController::class, 'update']);
+            Route::delete('delete/{user}', [UserController::class, 'destroy']);
+        });
     });
 
     Route::get('customers/find-phone', [CustomerController::class, 'findByPhoneNumber']);

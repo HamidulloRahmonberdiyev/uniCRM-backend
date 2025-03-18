@@ -7,10 +7,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable, HasApiTokens;
+    use HasFactory, Notifiable, HasApiTokens, HasRoles;
+
+    protected $guard = 'api';
 
     const ACTIVE = 1;
     const DEACTIVE = 0;
@@ -21,6 +25,7 @@ class User extends Authenticatable
         'username',
         'phone',
         'password',
+        'status'
     ];
 
     protected $hidden = [
@@ -35,46 +40,32 @@ class User extends Authenticatable
             'password' => 'hashed',
             'username' => 'string',
             'phone' => 'string',
+            'status' => 'boolean',
         ];
-    }
-
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(Role::class, 'user_role');
     }
 
     public function isSuperAdmin()
     {
-        return $this->roles->contains(function ($value) {
-            return in_array($value->name, ['super admin']);
-        });
+        return $this->roles->pluck('name')->contains('super_admin');
     }
 
     public function isAdmin()
     {
-        return $this->roles->contains(function ($value) {
-            return in_array($value->name, ['admin', 'boss']);
-        });
+        return $this->roles->pluck('name')->containsAny(['admin', 'boss']);
     }
 
     public function isSupplier()
     {
-        return $this->roles->contains(function ($value) {
-            return in_array($value->name, ['supplier']);
-        });
+        return $this->roles->pluck('name')->contains('supplier');
     }
 
     public function isOperator()
     {
-        return $this->roles->contains(function ($value) {
-            return in_array($value->name, ['operator']);
-        });
+        return $this->roles->pluck('name')->contains('operator');
     }
 
     public function getRoleNameAttribute(): string
     {
-        return optional($this->roles->first())->name === 'supplier'
-            ? 'Yetkazib beruvchi'
-            : optional($this->roles->first())->name ?? 'Xodim';
+        return $this->roles->pluck('name')->implode(', ') ?? '';
     }
 }

@@ -31,6 +31,7 @@ class StoreOrderRequest extends FormRequest
             'longitude' => 'nullable|string',
             'status' => 'nullable|integer',
             'source_id' => 'nullable|integer|exists:sources,id',
+            'supplier_id' => 'nullable|integer|exists:users,id'
         ];
     }
 

@@ -67,8 +67,9 @@ class OrderService
             'note' => $data['note'] ?? null,
             'latitude' => $data['latitude'] ?? null,
             'longitude' => $data['longitude'] ?? null,
-            'status' => Order::ACTIVE,
+            'status' => $data['status'] ?? Order::ACTIVE,
             'source_id' => $data['source_id'] ?? 1,
+            'supplier_id' => $data['supplier_id'] ?? null,
         ]);
     }
 

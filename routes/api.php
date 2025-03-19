@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\Settings\CustomerTypeController;
 use App\Http\Controllers\Api\Settings\DistrictController;
 use App\Http\Controllers\Api\Settings\PriceController;
 use App\Http\Controllers\Api\Settings\RegionController;
+use App\Http\Controllers\Api\Settings\RoleController;
 use App\Http\Controllers\Api\Settings\SourceController;
 use App\Http\Controllers\Api\StatsController;
 use Illuminate\Http\Request;
@@ -75,6 +76,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
             Route::post('store', [UserController::class, 'store']);
             Route::put('update/{user}', [UserController::class, 'update']);
             Route::delete('delete/{user}', [UserController::class, 'destroy']);
+        });
+
+        Route::prefix('roles')->group(function () {
+            Route::get('list', [RoleController::class, 'roles']);
         });
     });
 

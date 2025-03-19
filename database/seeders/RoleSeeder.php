@@ -14,12 +14,12 @@ class RoleSeeder extends Seeder
     public function run(): void
     {
         $roles = [
-            ['name' => 'super admin'],
-            ['name' => 'admin'],
-            ['name' => 'operator'],
-            ['name' => 'supplier'],
-            ['name' => 'boss'],
-            ['name' => 'user'],
+            ['name' => 'super_admin', 'guard_name' => 'api'],
+            ['name' => 'admin', 'guard_name' => 'api'],
+            ['name' => 'operator', 'guard_name' => 'api'],
+            ['name' => 'supplier', 'guard_name' => 'api'],
+            ['name' => 'boss', 'guard_name' => 'api'],
+            ['name' => 'user', 'guard_name' => 'api'],
         ];
 
         DB::table('roles')->insert($roles);

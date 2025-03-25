@@ -22,7 +22,6 @@ class UpdateUserRequest extends FormRequest
                 'sometimes',
                 'nullable',
                 'string',
-                'max:17',
                 Rule::unique('users')->ignore($user->id)->where(function ($query) {
                     return $query->where('email', $this->email);
                 }),

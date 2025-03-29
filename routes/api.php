@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
 use App\Http\Controllers\Api\Settings\CustomerTypeController;
 use App\Http\Controllers\Api\Settings\DistrictController;
+use App\Http\Controllers\Api\Settings\NeighborhoodController;
 use App\Http\Controllers\Api\Settings\PriceController;
 use App\Http\Controllers\Api\Settings\RegionController;
 use App\Http\Controllers\Api\Settings\RoleController;
@@ -65,6 +66,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('regions', [RegionController::class, 'index']);
         Route::get('regions/details', [RegionController::class, 'region_details']);
         Route::post('regions/{region}/change-status', [RegionController::class, 'change_status']);
+
+        Route::prefix('neighborhoods')->group(function () {
+            Route::get('/', [NeighborhoodController::class, 'index']);
+            Route::post('store', [NeighborhoodController::class, 'store']);
+            Route::put('update/{neighborhood}', [NeighborhoodController::class, 'update']);
+            Route::delete('delete/{neighborhood}', [NeighborhoodController::class, 'destroy']);
+        });
 
         Route::get('districts', [DistrictController::class, 'index']);
         Route::get('districts/{district}', [DistrictController::class, 'show']);

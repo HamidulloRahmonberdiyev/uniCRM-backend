@@ -11,6 +11,7 @@ class NeighborhoodResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'district' => $this->district ? new DistrictResource($this->district) : null,
             'name' => $this->name,
             'second_name' => $this->second_name,
             'status' => $this->status,

@@ -60,6 +60,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $accessToken,
             'refresh_token' => $refreshToken,
+            'user' => new UserResource($user),
             'token_type' => 'Bearer',
             'expires_in' => config('sanctum.expiration'),
         ]);

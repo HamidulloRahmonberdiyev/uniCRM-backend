@@ -12,19 +12,24 @@ class StatsService
 {
     public function getMonthlyOrderStats($year)
     {
-        return Order::selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(quantity) as total_quantity')
+        $orders = Order::selectRaw('DATE_FORMAT(date, "%Y-%m") as month, SUM(quantity) as total_quantity')
             ->whereYear('date', $year)
             ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->map(function ($order) use ($year) {
-                $monthName = Carbon::parse($order->month . '-01')->translatedFormat('F');
-                return [
-                    'year' => intval($year),
-                    'month' => getUzbekMonth($monthName),
-                    'value' => intval($order->total_quantity),
-                ];
-            });
+            ->pluck('total_quantity', 'month');
+
+        $months = collect(range(1, 12))->map(function ($month) use ($year, $orders) {
+            $date = Carbon::createFromDate($year, $month, 1);
+            $monthKey = $date->format('Y-m');
+            $monthName = $date->translatedFormat('F');
+
+            return [
+                'year' => $year,
+                'month' => getUzbekMonth($monthName),
+                'value' => intval($orders->get($monthKey, 0)),
+            ];
+        });
+
+        return $months;
     }
 
     public function getCustomerTypeChart()

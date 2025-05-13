@@ -246,9 +246,8 @@ class CustomerSeeder extends Seeder
             CustomerDetail::create([
                 'customer_id' => $customer->id,
                 'region_id' => rand(1, 12),
-                'city_id' => rand(1, 12),
-                'district_id' => rand(1, 50),
-                'neighborhood_id' => rand(1, 100),
+                'district_id' => rand(1, 100),
+                'neighborhood_id' => rand(1, 5000),
                 'home' => fake()->address(),
             ]);
         }

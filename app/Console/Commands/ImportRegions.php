@@ -35,13 +35,6 @@ class ImportRegions extends Command
                 );
             }
 
-            // foreach ($jsonData['cities'] as $city) {
-            //     DB::table('cities')->updateOrInsert(
-            //         ['id' => $city['id']],
-            //         ['region_id' => $city['region_id'], 'name' => $city['name']]
-            //     );
-            // }
-
             foreach ($jsonData['districts'] as $district) {
                 DB::table('districts')->updateOrInsert(
                     ['id' => $district['id']],

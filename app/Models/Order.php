@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\CustomerType;
+use App\Observers\OrderObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -55,6 +56,8 @@ class Order extends Model
     {
         parent::boot();
 
+        Order::observe(OrderObserver::class);
+
         static::created(function ($order) {
             if ($order->customer) {
                 $order->customer->update(['type_id' => CustomerType::ACTIVE->value]);
@@ -80,11 +83,6 @@ class Order extends Model
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
-    }
-
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class);
     }
 
     public function district(): BelongsTo

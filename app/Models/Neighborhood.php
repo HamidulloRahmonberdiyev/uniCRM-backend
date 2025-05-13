@@ -11,7 +11,6 @@ class Neighborhood extends Model
     const DEACTIVE = 0;
 
     protected $fillable = [
-        'city_id',
         'district_id',
         'name',
         'second_name',
@@ -21,7 +20,6 @@ class Neighborhood extends Model
     protected function casts(): array
     {
         return [
-            'city_id' => 'integer',
             'district_id' => 'integer',
             'name' => 'string',
             'second_name' => 'string',

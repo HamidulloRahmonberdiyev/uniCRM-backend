@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\FilterOrderRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
@@ -24,9 +25,9 @@ class OrderController extends Controller
         $this->orderService = $orderService;
     }
 
-    public function index(Request $request)
+    public function index(FilterOrderRequest $request)
     {
-        $orders = $this->orderService->getAllOrders($request);
+        $orders = $this->orderService->getAllOrders($request->validated());
         return OrderResource::collection($orders);
     }
 

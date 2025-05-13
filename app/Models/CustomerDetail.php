@@ -10,7 +10,6 @@ class CustomerDetail extends Model
     protected $fillable = [
         'customer_id',
         'region_id',
-        'city_id',
         'district_id',
         'neighborhood_id',
         'home',
@@ -22,7 +21,6 @@ class CustomerDetail extends Model
         return [
             'customer_id' => 'integer',
             'region_id' => 'integer',
-            'city_id' => 'integer',
             'district_id' => 'integer',
             'neighborhood_id' => 'integer',
             'home' => 'string',
@@ -38,11 +36,6 @@ class CustomerDetail extends Model
     public function region(): BelongsTo
     {
         return $this->belongsTo(Region::class);
-    }
-
-    public function city(): BelongsTo
-    {
-        return $this->belongsTo(City::class);
     }
 
     public function district(): BelongsTo

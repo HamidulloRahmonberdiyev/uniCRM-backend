@@ -10,41 +10,25 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderService
 {
-    public function getAllOrders(Request $request)
+    public function getAllOrders(array $data)
     {
-        $request->validate([
-            'name' => 'string|max:255',
-            'phone' => 'string|max:15',
-            'start_date' => 'nullable|date',
-            'end_date' => 'nullable|date|after_or_equal:start_date',
+        $query = Order::query()
+            ->select([
+                'id', 'customer_id', 'user_id', 'company_id', 'source_id',
+                'date', 'status', 'sum', 'district_id', 'neighborhood_id',
+                'address', 'quantity', 'note', 'latitude', 'longitude', 'created_at'
+            ]);
+
+        $this->applyFilters($query, $data);
+
+        $query->with([
+            'customer:id,first_name,last_name,middle_name,phone,phone2',
+            'district:id,name',
+            'neighborhood:id,name',
+            'source:id,name',
         ]);
 
-        return Order::query()
-            ->select(['id', 'customer_id', 'user_id', 'company_id', 'source_id', 'date', 'status', 'sum', 'city_id', 'district_id', 'neighborhood_id', 'address', 'quantity', 'note', 'latitude', 'longitude', 'created_at'])
-            ->when($request->filled('status'), fn($q) => $q->where('status', $request->status))
-            ->when($request->filled('start_date') && $request->filled('end_date'), function ($q) use ($request) {
-                $q->whereBetween('date', [$request->start_date, $request->end_date]);
-            })
-            ->when($request->filled('search'), function ($q) use ($request) {
-                $search = "%{$request->search}%";
-                $q->whereIn('customer_id', function ($subQuery) use ($search) {
-                    $subQuery->select('id')
-                        ->from('customers')
-                        ->where('first_name', 'like', $search)
-                        ->orWhere('last_name', 'like', $search)
-                        ->orWhere('middle_name', 'like', $search)
-                        ->orWhere('phone', 'like', $search)
-                        ->orWhere('phone2', 'like', $search);
-                });
-            })
-            ->with([
-                'customer:id,first_name,last_name,middle_name,phone,phone2',
-                'district:id,name',
-                'neighborhood:id,name',
-                'source:id,name',
-            ])
-            ->orderByDesc('created_at')
-            ->paginate(20);
+        return $query->orderByDesc('created_at')->paginate(20);
     }
 
     public function createOrder(array $data): Order
@@ -84,7 +68,6 @@ class OrderService
 
             $order->update([
                 'customer_id' => $order->customer_id,
-                'city_id' => $data['city_id'] ?? null,
                 'district_id' => $data['district_id'] ?? null,
                 'neighborhood_id' => $data['neighborhood_id'] ?? null,
                 'quantity' => $data['quantity'],
@@ -106,7 +89,6 @@ class OrderService
     public function changeStatusOrder(Order $order, $data)
     {
         return $order->update([
-            // 'supplier_id' => auth()->user()->isSupplier() && $data == Order::DONE ? Auth::id() : null,
             'status' => $data
         ]);
     }
@@ -141,5 +123,50 @@ class OrderService
                 'bottles' => (clone $query)->where('status', Order::CANCEL)->sum('quantity')
             ]
         ];
+    }
+
+    private function applyFilters($query, array $data)
+    {
+        if (isset($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
+        if (isset($data['start_date']) && isset($data['end_date'])) {
+            $query->whereBetween('date', [$data['start_date'], $data['end_date']]);
+        }
+
+        if (isset($data['search'])) {
+            $search = "%{$data['search']}%";
+            $query->whereIn('customer_id', function ($subQuery) use ($search) {
+                $subQuery->select('id')
+                    ->from('customers')
+                    ->where('first_name', 'like', $search)
+                    ->orWhere('last_name', 'like', $search)
+                    ->orWhere('middle_name', 'like', $search)
+                    ->orWhere('phone', 'like', $search)
+                    ->orWhere('phone2', 'like', $search);
+            });
+        }
+
+        if (isset($data['name'])) {
+            $search = "%{$data['name']}%";
+            $query->whereIn('customer_id', function ($subQuery) use ($search) {
+                $subQuery->select('id')
+                    ->from('customers')
+                    ->where('first_name', 'like', $search)
+                    ->orWhere('last_name', 'like', $search)
+                    ->orWhere('middle_name', 'like', $search);
+            });
+        }
+
+        if (isset($data['phone'])) {
+            $search = "%{$data['phone']}%";
+            $query->whereIn('customer_id', function ($subQuery) use ($search) {
+                $subQuery->select('id')
+                    ->from('customers')
+                    ->where('phone', 'like', $search)
+                    ->orWhere('phone2', 'like', $search);
+            });
+        }
     }
 }

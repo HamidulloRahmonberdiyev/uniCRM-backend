@@ -14,7 +14,7 @@ class OrderService
         $name = $nameOrPhone['name'] ?? '';
         $phone = $nameOrPhone['phone'] ?? '';
 
-        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+        $orders = Order::with(['customer', 'district', 'neighborhood'])
             ->where('supplier_id', null)
             ->where('status', Order::ACTIVE)
             ->whereHas('customer', function ($q) use ($name, $phone) {
@@ -30,18 +30,18 @@ class OrderService
                 }
             })
             ->orderByRaw("
-            (CASE 
+            (CASE
                 WHEN EXISTS (
-                    SELECT 1 FROM customers 
-                    WHERE customers.id = orders.customer_id 
-                    AND (customers.phone LIKE ? 
+                    SELECT 1 FROM customers
+                    WHERE customers.id = orders.customer_id
+                    AND (customers.phone LIKE ?
                          OR customers.phone2 LIKE ?)
                 ) THEN 1
                 WHEN EXISTS (
-                    SELECT 1 FROM customers 
-                    WHERE customers.id = orders.customer_id 
-                    AND (customers.first_name LIKE ? 
-                         OR customers.last_name LIKE ? 
+                    SELECT 1 FROM customers
+                    WHERE customers.id = orders.customer_id
+                    AND (customers.first_name LIKE ?
+                         OR customers.last_name LIKE ?
                          OR customers.middle_name LIKE ?)
                 ) THEN 2
                 ELSE 3
@@ -54,7 +54,7 @@ class OrderService
 
     public function getBookedOrders()
     {
-        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+        $orders = Order::with(['customer', 'district', 'neighborhood'])
             ->where('supplier_id', Auth::id())
             ->where('status', Order::ACTIVE)
             ->get();
@@ -64,7 +64,7 @@ class OrderService
 
     public function getOrderHistory()
     {
-        $orders = Order::with(['customer', 'city', 'district', 'neighborhood'])
+        $orders = Order::with(['customer', 'district', 'neighborhood'])
             ->whereBetween('created_at', [now()->subDays(30), now()])
             ->where('supplier_id', Auth::id())
             ->where('status', Order::DONE)

@@ -14,9 +14,22 @@ class OrderService
     {
         $query = Order::query()
             ->select([
-                'id', 'customer_id', 'user_id', 'company_id', 'source_id',
-                'date', 'status', 'sum', 'district_id', 'neighborhood_id',
-                'address', 'quantity', 'note', 'latitude', 'longitude', 'created_at'
+                'id',
+                'customer_id',
+                'user_id',
+                'company_id',
+                'source_id',
+                'date',
+                'status',
+                'sum',
+                'district_id',
+                'neighborhood_id',
+                'address',
+                'quantity',
+                'note',
+                'latitude',
+                'longitude',
+                'created_at'
             ]);
 
         $this->applyFilters($query, $data);
@@ -127,6 +140,10 @@ class OrderService
 
     private function applyFilters($query, array $data)
     {
+        $nameOrPhone = !empty($data['name_or_phone']) ? extractNameAndPhone($data['name_or_phone']) : ['name' => '', 'phone' => ''];
+        $name = $nameOrPhone['name'] ?? '';
+        $phone = $nameOrPhone['phone'] ?? '';
+
         if (isset($data['status'])) {
             $query->where('status', $data['status']);
         }
@@ -135,21 +152,8 @@ class OrderService
             $query->whereBetween('date', [$data['start_date'], $data['end_date']]);
         }
 
-        if (isset($data['search'])) {
-            $search = "%{$data['search']}%";
-            $query->whereIn('customer_id', function ($subQuery) use ($search) {
-                $subQuery->select('id')
-                    ->from('customers')
-                    ->where('first_name', 'like', $search)
-                    ->orWhere('last_name', 'like', $search)
-                    ->orWhere('middle_name', 'like', $search)
-                    ->orWhere('phone', 'like', $search)
-                    ->orWhere('phone2', 'like', $search);
-            });
-        }
-
-        if (isset($data['name'])) {
-            $search = "%{$data['name']}%";
+        if (isset($name)) {
+            $search = '%' . $name . '%';
             $query->whereIn('customer_id', function ($subQuery) use ($search) {
                 $subQuery->select('id')
                     ->from('customers')
@@ -159,8 +163,8 @@ class OrderService
             });
         }
 
-        if (isset($data['phone'])) {
-            $search = "%{$data['phone']}%";
+        if (isset($phone)) {
+            $search = '%' . $phone . '%';
             $query->whereIn('customer_id', function ($subQuery) use ($search) {
                 $subQuery->select('id')
                     ->from('customers')

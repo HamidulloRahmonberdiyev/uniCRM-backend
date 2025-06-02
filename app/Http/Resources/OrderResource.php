@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
                 'home' => optional($this->customer->customerDetail)->home,
             ] : null,
             'user' => $this->user->name,
+            'supplier' => $this->supplier->name ?? null,
             'district' => $this->district ? new DistrictResource($this->district) : null,
             'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
             'quantity' => $this->quantity,

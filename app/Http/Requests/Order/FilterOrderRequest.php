@@ -14,10 +14,10 @@ class FilterOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'string|max:255',
-            'phone' => 'string|max:15',
+            'name_or_phone' => 'string|max:255',
             'start_date' => 'nullable|date',
             'end_date' => 'nullable|date|after_or_equal:start_date',
+            'status' => 'nullable|integer',
         ];
     }
 }

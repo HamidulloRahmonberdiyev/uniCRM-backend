@@ -2,6 +2,7 @@
 
 namespace App\Services\Customer;
 
+use App\Exceptions\CustomerNotFoundException;
 use App\Models\City;
 use App\Models\Customer;
 use App\Models\District;
@@ -200,17 +201,17 @@ class CustomerService
             });
         }
 
-        return $query->orderByRaw(" 
-    CASE  
-        WHEN phone = ? OR phone2 = ? THEN 1 -- Exact phone match 
+        return $query->orderByRaw("
+    CASE
+        WHEN phone = ? OR phone2 = ? THEN 1 -- Exact phone match
         WHEN phone LIKE ? OR phone2 LIKE ? THEN 2 -- Phone starts with the pattern
         WHEN phone LIKE ? OR phone2 LIKE ? THEN 3 -- Phone contains the pattern
         WHEN first_name = ? OR last_name = ? THEN 4 -- Exact name match
         WHEN first_name LIKE ? OR last_name LIKE ? THEN 5 -- Name starts with the pattern
         WHEN first_name LIKE ? OR last_name LIKE ? THEN 6 -- Name contains the pattern
-        ELSE 7 
-    END, 
-    CASE  
+        ELSE 7
+    END,
+    CASE
         WHEN (phone LIKE ? OR phone2 LIKE ?) AND (first_name LIKE ? OR last_name LIKE ?) THEN 1 -- Both phone and name match
         ELSE 2 -- Single field match
     END,
@@ -234,5 +235,22 @@ class CustomerService
         ])
             ->limit(20)
             ->get();
+    }
+
+    public function findCustomerByPhoneOrFail(string $phone): ?Customer
+    {
+        $sanitizedPhone = sanitizePhone($phone);
+
+        $customer = Customer::query()
+            ->where(function ($query) use ($sanitizedPhone) {
+                $query->where('phone', $sanitizedPhone)
+                    ->orWhere('phone2', $sanitizedPhone);
+            })->first();
+
+        if (!$customer) {
+            throw new CustomerNotFoundException();
+        }
+
+        return $customer;
     }
 }

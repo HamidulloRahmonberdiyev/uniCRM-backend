@@ -96,7 +96,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         Route::get('orders', [OrderMonitoringController::class, 'index']);
     });
 
-    Route::get('customers/find-phone', [CustomerController::class, 'findByPhoneNumber']);
+    Route::get('customers/find-phone', [CustomerController::class, 'findCustomerByPhone']);
     Route::get('customers/stats', [CustomerController::class, 'stats']);
     Route::get('customers/search', [CustomerController::class, 'search']);
     Route::get('customers', [CustomerController::class, 'index']);

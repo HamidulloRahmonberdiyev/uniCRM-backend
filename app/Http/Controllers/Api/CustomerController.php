@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\CustomerNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\FilterCustomerRequest;
+use App\Http\Requests\customer\FindCustomerRequest;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;
@@ -91,16 +93,13 @@ class CustomerController extends Controller
         return $this->successResponse($stats);
     }
 
-    public function findByPhoneNumber(Request $request)
+    public function findCustomerByPhone(FindCustomerRequest $request)
     {
-        $request->validate(['phone' => 'required|string']);
-
-        $sanitizedPhone = sanitizePhone($request->phone);
-
-        $customer = Customer::where('phone', $sanitizedPhone)
-            ->orWhere('phone2', $sanitizedPhone)
-            ->first();
-
-        return new CustomerResource($customer);
+        try {
+            $customer = $this->customerService->findCustomerByPhoneOrFail($request->phone);
+            return new CustomerResource($customer);
+        } catch (CustomerNotFoundException $exception) {
+            throw $exception;
+        }
     }
 }

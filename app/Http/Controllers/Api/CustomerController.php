@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Exceptions\CustomerNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Customer\FilterCustomerRequest;
-use App\Http\Requests\customer\FindCustomerRequest;
+use App\Http\Requests\Customer\FindCustomerRequest;
 use App\Http\Requests\Customer\StoreCustomerRequest;
 use App\Http\Requests\Customer\UpdateCustomerRequest;
 use App\Http\Resources\CustomerResource;

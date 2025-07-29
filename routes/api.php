@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\Mobile\OrderController as MobileOrderController;
 use App\Http\Controllers\Api\Mobile\SupplierController;
-use App\Http\Controllers\Api\Monitoring\OrderMonitoringController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\Settings\BottleController;
@@ -92,10 +91,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
         });
     });
 
-    Route::prefix('monitoring')->group(function () {
-        Route::get('orders', [OrderMonitoringController::class, 'index']);
-    });
-
     Route::get('customers/find-phone', [CustomerController::class, 'findCustomerByPhone']);
     Route::get('customers/stats', [CustomerController::class, 'stats']);
     Route::get('customers/search', [CustomerController::class, 'search']);
@@ -141,3 +136,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('returneds/update/{returned}', [ReturnedController::class, 'update']);
     Route::delete('returneds/delete/{returned}', [ReturnedController::class, 'destroy']);
 });
+
+require_once 'api/monitoring.php';

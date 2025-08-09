@@ -138,3 +138,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 require_once 'api/monitoring.php';
+require_once 'api/product.php';

@@ -144,4 +144,18 @@ if (!function_exists('formatPhone')) {
             ];
         }
     }
+
+    if (!function_exists('formatPrice')) {
+        /**
+         * @param float|int $amount The price to format (e.g. 15000 or 15000.75)
+         * @param string $decimal_point The decimal point (default: '.')
+         *
+         * @return string The formatted price, without currency (e.g. 15 000)
+         */
+
+        function formatPrice($amount, $decimals = 0, $thousands_sep = ' ', $decimal_point = '.')
+        {
+            return number_format($amount, $decimals, $decimal_point, $thousands_sep);
+        }
+    }
 }

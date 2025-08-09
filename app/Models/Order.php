@@ -15,6 +15,7 @@ class Order extends Model
 
     protected $fillable = [
         'customer_id',
+        'product_id',
         'user_id',
         'supplier_id',
         'company_id',
@@ -36,6 +37,7 @@ class Order extends Model
     {
         return [
             'customer_id' => 'integer',
+            'product_id' => 'integer',
             'user_id' => 'integer',
             'supplier_id' => 'integer',
             'company_id' => 'integer',
@@ -98,5 +100,10 @@ class Order extends Model
     public function source(): BelongsTo
     {
         return $this->belongsTo(Source::class);
+    }
+
+    public function product(): BelongsTo
+    {
+        return $this->belongsTo(Product::class);
     }
 }

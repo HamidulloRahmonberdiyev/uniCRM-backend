@@ -68,4 +68,11 @@ class User extends Authenticatable
     {
         return $this->roles->pluck('name')->implode(', ') ?? '';
     }
+
+    public function scopeSupplier($query)
+    {
+        return $query->whereHas('roles', function ($q) {
+            $q->where('name', 'supplier');
+        });
+    }
 }

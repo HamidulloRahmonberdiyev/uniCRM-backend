@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Order\ChangeOrderActionRequest;
 use App\Http\Requests\Order\FilterOrderRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
@@ -66,5 +67,22 @@ class OrderController extends Controller
     {
         $stats = $this->orderService->getOrderStats($request);
         return response()->json(['success' => true, 'data' => $stats]);
+    }
+
+    public function attachOrderToSupplier(Request $request, Order $order)
+    {
+        $order->update([
+            'supplier_id' => $request->supplier_id,
+        ]);
+
+        return $this->successResponse('Attached Order to supplier successfully', 200);
+    }
+
+    public function changeOrderAction(ChangeOrderActionRequest $request, Order $order)
+    {
+        dd($request->all());
+        $order->update($request->validated());
+
+        return $this->successResponse('Order updated successfully', 200);
     }
 }

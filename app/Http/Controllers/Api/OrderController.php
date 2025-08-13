@@ -13,6 +13,7 @@ use App\Models\Order;
 use App\Services\Mobile\OrderService as MobileOrderService;
 use App\Services\Order\OrderService;
 use App\Traits\ApiJsonResponceTrait;
+use Exception;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -71,18 +72,18 @@ class OrderController extends Controller
 
     public function attachOrderToSupplier(Request $request, Order $order)
     {
-        $order->update([
-            'supplier_id' => $request->supplier_id,
-        ]);
+        $order->update(['supplier_id' => $request->supplier_id]);
 
         return $this->successResponse('Attached Order to supplier successfully', 200);
     }
 
     public function changeOrderAction(ChangeOrderActionRequest $request, Order $order)
     {
-        dd($request->all());
-        $order->update($request->validated());
-
-        return $this->successResponse('Order updated successfully', 200);
+        try {
+            $this->orderService->changeStatus($order, $request->validated());
+            return $this->successResponse('Order updated successfully');
+        } catch (Exception $e) {
+            return $this->errorResponse($e->getMessage(), 400);
+        }
     }
 }

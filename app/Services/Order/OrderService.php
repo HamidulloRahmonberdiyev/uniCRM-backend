@@ -2,11 +2,13 @@
 
 namespace App\Services\Order;
 
+use App\Enums\OrderStatusEnum;
 use App\Models\Neighborhood;
 use App\Models\Order;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use InvalidArgumentException;
 
 class OrderService
 {
@@ -172,5 +174,15 @@ class OrderService
                     ->orWhere('phone2', 'like', $search);
             });
         }
+    }
+
+    public function changeStatus(Order $order, array $data)
+    {
+        $status = OrderStatusEnum::fromString($data['status']);
+
+        return $order->update([
+            'supplier_id' => $data['supplier_id'] ?? null,
+            'status' => $status->value,
+        ]);
     }
 }

@@ -43,7 +43,7 @@ class UpdateUserRequest extends FormRequest
                     return $query->where('phone', $this->phone);
                 }),
             ],
-            'password' => 'sometimes|string|min:8',
+            'password' => 'sometimes|string|min:6',
             'roles' => 'sometimes|nullable|array',
             'roles.*' => 'exists:roles,id',
             'status' => 'sometimes|nullable|boolean',

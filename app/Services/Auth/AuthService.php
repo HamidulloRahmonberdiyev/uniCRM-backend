@@ -31,4 +31,12 @@ class AuthService
             throw $e;
         }
     }
+
+    public function getAccessToken(User $user)
+    {
+        return [
+            'access_token' => $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken,
+            'refresh_token' => $user->createToken('refresh-token', ['refresh'], now()->addDays(180))->plainTextToken
+        ];
+    }
 }

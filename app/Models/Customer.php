@@ -62,4 +62,9 @@ class Customer extends Model
     {
         return $this->belongsTo(CustomerType::class, 'type_id', 'id');
     }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', self::ACTIVE);
+    }
 }

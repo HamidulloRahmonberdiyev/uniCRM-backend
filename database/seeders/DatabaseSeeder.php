@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@admin.com',
-            'phone' => '+998999999999',
+            'phone' => '998999999999',
             'username' => 'admin',
             'password' => '12345',
         ]);
@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             CustomerSeeder::class,
             SourceSeeder::class,
             RoleSeeder::class,
+            CustomerTypeSeeder::class,
         ]);
     }
 }

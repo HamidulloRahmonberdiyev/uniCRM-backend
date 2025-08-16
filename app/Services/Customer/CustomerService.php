@@ -20,7 +20,7 @@ class CustomerService
         $name = $nameOrPhone['name'] ?? '';
         $phone = $nameOrPhone['phone'] ?? '';
 
-        $query = Customer::where('status', Customer::ACTIVE);
+        $query = Customer::active();
 
         if (isset($data['type_id']) && !empty($data['type_id'])) {
             $query->where('type_id', $data['type_id']);

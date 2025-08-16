@@ -54,8 +54,8 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $accessToken = $user->createToken('access-token', ['*'], now()->addDays(30))->plainTextToken;
-        $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(365))->plainTextToken;
+        $accessToken = $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
+        $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(180))->plainTextToken;
 
         return response()->json([
             'access_token' => $accessToken,

@@ -13,7 +13,6 @@ use App\Http\Resources\OrderResource;
 use App\Models\Customer;
 use App\Services\Customer\CustomerService;
 use App\Traits\ApiJsonResponceTrait;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CustomerController extends Controller

@@ -16,7 +16,6 @@ class UserResource extends JsonResource
             'username' => $this->username,
             'phone' => formatPhone($this->phone),
             'roles' => $this->roles ? RoleResource::collection($this->roles) : null,
-            'role_name' => $this->role_name,
             'created_at' => $this->created_at,
             'orders_count' => Order::where('supplier_id', $this->id)->where('status', Order::DONE)->count(),
             'status' => $this->status,

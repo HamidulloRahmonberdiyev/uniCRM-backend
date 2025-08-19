@@ -27,7 +27,6 @@ class RoleController extends Controller
 
     public function index(IndexRoleRequest $request)
     {
-        dd($request->all());
         try {
             $result = $this->roleService->getPaginatedRoles($request->per_page);
 

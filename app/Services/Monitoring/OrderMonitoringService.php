@@ -6,7 +6,6 @@ use App\Enums\OrderGroupType;
 use App\Http\Resources\OrderResource;
 use App\Models\Order;
 use App\Traits\ApiJsonResponceTrait;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class OrderMonitoringService
@@ -20,7 +19,7 @@ class OrderMonitoringService
         foreach (OrderGroupType::cases() as $groupType) {
             [$query, $count] = $this->getQueryForGroup($groupType, $supplierId);
 
-            $orders = $query->orderBy('created_at', 'desc')
+            $orders = $query->orderBy('updated_at', 'desc')
                 ->forPage($page, $perPage)
                 ->get();
 

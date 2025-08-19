@@ -21,8 +21,11 @@ class OrderResource extends JsonResource
                 'neighborhood' => optional(optional($this->customer->customerDetail)->neighborhood)->name,
                 'home' => optional($this->customer->customerDetail)->home,
             ] : null,
-            'user' => $this->user->name,
-            'supplier' => $this->supplier->name ?? null,
+            'user' => [
+                'id' => $this->user->id,
+                'name' => $this->user->name,
+            ],
+            'supplier' => new UserResource($this->supplier) ?? null,
             'district' => $this->district ? new DistrictResource($this->district) : null,
             'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
             'quantity' => $this->quantity,
@@ -35,6 +38,7 @@ class OrderResource extends JsonResource
             'status' => $this->status,
             'source' => $this->source->name ?? null,
             'created_at' => formatDateTime($this->created_at),
+            'updated_at' => formatDateTime($this->updated_at),
         ];
     }
 }

@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         $query = Order::query()
-            ->whereDate('date', $today);
+            ->whereDate('created_at', $today);
 
         $customersCount =  Customer::where('status', Customer::ACTIVE)->count();
 

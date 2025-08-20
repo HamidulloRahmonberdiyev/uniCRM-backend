@@ -22,6 +22,7 @@ class StoreOrderRequest extends FormRequest
             'company_id' => 'nullable|exists:companies,id',
             'district_id' => 'nullable|exists:districts,id',
             'neighborhood_id' => 'nullable|exists:neighborhoods,id',
+            'product_id' => 'nullable|integer|exists:products,id',
             'quantity' => 'required|integer|min:1',
             'sum' => 'nullable|numeric|min:0',
             'date' => 'nullable|date',
@@ -31,7 +32,7 @@ class StoreOrderRequest extends FormRequest
             'longitude' => 'nullable|string',
             'status' => 'nullable|integer',
             'source_id' => 'nullable|integer|exists:sources,id',
-            'supplier_id' => 'nullable|integer|exists:users,id'
+            'supplier_id' => 'nullable|integer|exists:users,id',
         ];
     }
 
@@ -42,6 +43,8 @@ class StoreOrderRequest extends FormRequest
             'customer_id.exists' => 'Berilgan mijoz mavjud emas.',
 
             'user_id.exists' => 'Berilgan foydalanuvchi mavjud emas.',
+
+            'product_id.exists' => 'Berilgan mahsulot mavjud emas.',
 
             'company_id.exists' => 'Berilgan kompaniya mavjud emas.',
 

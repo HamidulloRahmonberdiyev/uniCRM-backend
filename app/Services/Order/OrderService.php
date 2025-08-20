@@ -3,15 +3,20 @@
 namespace App\Services\Order;
 
 use App\Enums\OrderStatusEnum;
-use App\Models\Neighborhood;
 use App\Models\Order;
+use App\Repositories\Interfaces\NeighborhoodRepositoryInterface;
+use App\Repositories\Interfaces\OrderRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use InvalidArgumentException;
 
 class OrderService
 {
+    public function __construct(
+        private OrderRepositoryInterface $orderRepository,
+        private NeighborhoodRepositoryInterface $neighborhoodRepository
+    ) {}
+
     public function getAllOrders(array $data)
     {
         $query = Order::query()
@@ -49,19 +54,26 @@ class OrderService
     public function createOrder(array $data): Order
     {
         if (!empty($data['neighborhood_id'])) {
-            $neighborhood = Neighborhood::find($data['neighborhood_id']);
+            $neighborhood = $this->neighborhoodRepository->findById($data['neighborhood_id']);
             $data['district_id'] = $neighborhood?->district_id;
         }
 
-        return Order::create([
+        $orderData = $this->prepareOrderCreateData($data);
+
+        return $this->orderRepository->create($orderData);
+    }
+
+    private function prepareOrderCreateData(array $data): array
+    {
+        return [
             'customer_id' => $data['customer_id'],
             'user_id' => Auth::id(),
-            'company_id' => 1,
+            'company_id' => $data['company_id'] ?? 1,
             'district_id' => $data['district_id'] ?? null,
             'neighborhood_id' => $data['neighborhood_id'] ?? null,
             'quantity' => $data['quantity'],
             'sum' => $data['sum'] ?? null,
-            'date' => Carbon::today(),
+            'date' => $data['date'] ?? Carbon::today(),
             'address' => $data['address'] ?? null,
             'note' => $data['note'] ?? null,
             'latitude' => $data['latitude'] ?? null,
@@ -69,31 +81,35 @@ class OrderService
             'status' => $data['status'] ?? Order::ACTIVE,
             'source_id' => $data['source_id'] ?? 1,
             'supplier_id' => $data['supplier_id'] ?? null,
-        ]);
+            'product_id' => $data['product_id'] ?? null,
+        ];
     }
 
     public function updateOrder(Order $order, array $data): Order
     {
-        if ($order->status !== Order::CANCEL) {
-
-            if (!empty($data['neighborhood_id'])) {
-                $neighborhood = Neighborhood::find($data['neighborhood_id']);
-                $data['district_id'] = $neighborhood?->district_id;
-            }
-
-            $order->update([
-                'customer_id' => $order->customer_id,
-                'district_id' => $data['district_id'] ?? null,
-                'neighborhood_id' => $data['neighborhood_id'] ?? null,
-                'quantity' => $data['quantity'],
-                'sum' => $data['sum'] ?? null,
-                'address' => $data['address'] ?? null,
-                'note' => $data['note'] ?? null,
-                'status' => $data['status'],
-            ]);
+        if (!empty($data['neighborhood_id'])) {
+            $neighborhood = $this->neighborhoodRepository->findById($data['neighborhood_id']);
+            $data['district_id'] = $neighborhood?->district_id;
         }
 
-        return $order;
+        $updateData = $this->prepareOrderUpdateData($order, $data);
+
+        return $this->orderRepository->update($order, $updateData);
+    }
+
+    private function prepareOrderUpdateData(Order $order, array $data): array
+    {
+        return [
+            'customer_id' => $order->customer_id,
+            'district_id' => $data['district_id'] ?? $order->district_id,
+            'neighborhood_id' => $data['neighborhood_id'] ?? $order->neighborhood_id,
+            'product_id' => $data['product_id'] ?? $order->product_id,
+            'quantity' => $data['quantity'] ?? $order->quantity,
+            'sum' => $data['sum'] ?? $order->sum,
+            'address' => $data['address'] ?? $order->address,
+            'note' => $data['note'] ?? $order->note,
+            'status' => $data['status'] ?? $order->status,
+        ];
     }
 
     public function deleteOrder(Order $order): void

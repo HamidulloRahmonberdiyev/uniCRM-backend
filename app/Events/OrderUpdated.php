@@ -2,12 +2,8 @@
 
 namespace App\Events;
 
-use App\Models\Order;
+use App\Http\Resources\OrderResource;
 use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -16,11 +12,11 @@ class OrderUpdated implements ShouldBroadcastNow
 {
     use Dispatchable, SerializesModels;
 
-    public Order $order;
+    public $order;
 
-    public function __construct(Order $order)
+    public function __construct($order)
     {
-        $this->order = $order;
+        $this->order = new OrderResource($order);
     }
 
     public function broadcastOn(): Channel

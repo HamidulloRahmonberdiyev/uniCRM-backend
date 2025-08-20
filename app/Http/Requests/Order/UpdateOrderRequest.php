@@ -20,6 +20,7 @@ class UpdateOrderRequest extends FormRequest
             'company_id' => 'sometimes|exists:companies,id',
             'district_id' => 'sometimes|exists:districts,id',
             'neighborhood_id' => 'sometimes|exists:neighborhoods,id',
+            'product_id' => 'sometimes|integer|exists:products,id',
             'quantity' => 'sometimes|integer|min:1',
             'sum' => 'sometimes|numeric|min:0',
             'date' => 'sometimes|date',
@@ -35,6 +36,8 @@ class UpdateOrderRequest extends FormRequest
     {
         return [
             'company_id.exists' => 'Berilgan kompaniya mavjud emas.',
+
+            'product_id.exists' => 'Berilgan mahsulot mavjud emas.',
 
             'district_id.exists' => 'Berilgan tuman mavjud emas.',
 

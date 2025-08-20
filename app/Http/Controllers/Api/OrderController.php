@@ -8,13 +8,12 @@ use App\Http\Requests\Order\FilterOrderRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
-use App\Http\Resources\Orders\OrderDetailResource;
 use App\Models\Order;
-use App\Services\Mobile\OrderService as MobileOrderService;
 use App\Services\Order\OrderService;
 use App\Traits\ApiJsonResponceTrait;
 use Exception;
 use Illuminate\Http\Request;
+use InvalidArgumentException;
 
 class OrderController extends Controller
 {
@@ -46,14 +45,22 @@ class OrderController extends Controller
 
     public function update(UpdateOrderRequest $request, Order $order)
     {
-        $updatedOrder = $this->orderService->updateOrder($order, $request->validated());
-        return new OrderResource($updatedOrder);
+        try {
+            $updatedOrder = $this->orderService->updateOrder($order, $request->validated());
+            return new OrderResource($updatedOrder);
+        } catch (InvalidArgumentException $e) {
+            return $this->errorResponse($e->getMessage(), 422);
+        }
     }
 
     public function destroy(Order $order)
     {
-        $this->orderService->deleteOrder($order);
-        return $this->successResponse('Order deleted successfully', 200);
+        try {
+            $this->orderService->deleteOrder($order);
+            return $this->successResponse('Order deleted successfully', 200);
+        } catch (InvalidArgumentException $e) {
+            return $this->errorResponse($e->getMessage(), 422);
+        }
     }
 
     public function changeStatus(Request $request, Order $order)

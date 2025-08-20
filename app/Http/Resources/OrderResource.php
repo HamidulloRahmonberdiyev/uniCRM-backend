@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Http\Resources\Product\ProductResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -28,6 +29,7 @@ class OrderResource extends JsonResource
             'supplier' => new UserResource($this->supplier) ?? null,
             'district' => $this->district ? new DistrictResource($this->district) : null,
             'neighborhood' => $this->neighborhood ? new NeighborhoodResource($this->neighborhood) : null,
+            'product' => new ProductResource($this->product) ?? null,
             'quantity' => $this->quantity,
             'sum' => $this->sum ?? null,
             'date' => formatDate($this->date),

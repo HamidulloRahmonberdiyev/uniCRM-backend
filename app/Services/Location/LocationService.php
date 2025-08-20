@@ -94,7 +94,7 @@ class LocationService
             ->whereHas('district', function ($query) {
                 $query->where('status', District::ACTIVE);
             })
-            ->select('id', 'name', 'district_id', 'city_id')
+            ->select('id', 'name', 'district_id')
             ->get();
 
         return response()->json([

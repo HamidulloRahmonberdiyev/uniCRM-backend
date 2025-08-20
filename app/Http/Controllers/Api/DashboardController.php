@@ -48,8 +48,7 @@ class DashboardController extends Controller
         $today = Carbon::today();
 
         $orders = Order::query()
-            ->where('status', Order::ACTIVE)
-            ->whereDate('date', $today)
+            ->whereDate('created_at', $today)
             ->latest('created_at')
             ->paginate(20);
 

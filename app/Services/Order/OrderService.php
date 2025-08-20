@@ -20,24 +20,7 @@ class OrderService
     public function getAllOrders(array $data)
     {
         $query = Order::query()
-            ->select([
-                'id',
-                'customer_id',
-                'user_id',
-                'company_id',
-                'source_id',
-                'date',
-                'status',
-                'sum',
-                'district_id',
-                'neighborhood_id',
-                'address',
-                'quantity',
-                'note',
-                'latitude',
-                'longitude',
-                'created_at'
-            ]);
+            ->select('*');
 
         $this->applyFilters($query, $data);
 

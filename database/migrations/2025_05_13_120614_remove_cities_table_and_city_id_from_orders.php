@@ -13,18 +13,21 @@ return new class extends Migration
     {
         Schema::table('orders', function (Blueprint $table) {
             if (Schema::hasColumn('orders', 'city_id')) {
+                $table->dropIndex(['city_id']);
                 $table->dropColumn('city_id');
             }
         });
 
         Schema::table('customer_details', function (Blueprint $table) {
             if (Schema::hasColumn('customer_details', 'city_id')) {
+                $table->dropIndex(['city_id']);
                 $table->dropColumn('city_id');
             }
         });
 
         Schema::table('neighborhoods', function (Blueprint $table) {
             if (Schema::hasColumn('neighborhoods', 'city_id')) {
+                $table->dropIndex(['city_id']);
                 $table->dropColumn('city_id');
             }
         });

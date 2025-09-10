@@ -12,15 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->dropColumn('city_id');
+            if (Schema::hasColumn('orders', 'city_id')) {
+                $table->dropColumn('city_id');
+            }
         });
 
         Schema::table('customer_details', function (Blueprint $table) {
-            $table->dropColumn('city_id');
+            if (Schema::hasColumn('customer_details', 'city_id')) {
+                $table->dropColumn('city_id');
+            }
         });
 
         Schema::table('neighborhoods', function (Blueprint $table) {
-            $table->dropColumn('city_id');
+            if (Schema::hasColumn('neighborhoods', 'city_id')) {
+                $table->dropColumn('city_id');
+            }
         });
 
         Schema::dropIfExists('cities');

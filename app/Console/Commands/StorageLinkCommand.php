@@ -6,21 +6,29 @@ use Illuminate\Console\Command;
 
 class StorageLinkCommand extends Command
 {
-    protected $signature = 'storage-link';
+    protected $signature = 'storage:link-custom';
 
     protected $description = 'Create storage link without exec';
 
     public function handle()
     {
-        if (file_exists(public_path('storage'))) {
-            return $this->error('Storage link already exists.');
+        $publicStorage = public_path('storage');
+        $appStorage = storage_path('app/public');
+
+        if (file_exists($publicStorage)) {
+            if (is_link($publicStorage)) {
+                unlink($publicStorage);
+            } else {
+                $this->error('Public/storage is not a symbolic link.');
+                return;
+            }
         }
 
-        $this->laravel->make('files')->link(
-            storage_path('app/public'),
-            public_path('storage')
-        );
-
-        $this->info('Storage link created successfully.');
+        try {
+            symlink($appStorage, $publicStorage);
+            $this->info('The [public/storage] directory has been linked.');
+        } catch (\Exception $e) {
+            $this->error('Failed to create symbolic link: ' . $e->getMessage());
+        }
     }
 }

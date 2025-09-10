@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\File;
 
 class StorageLinkCommand extends Command
 {
@@ -15,20 +16,15 @@ class StorageLinkCommand extends Command
         $publicStorage = public_path('storage');
         $appStorage = storage_path('app/public');
 
-        if (file_exists($publicStorage)) {
-            if (is_link($publicStorage)) {
-                unlink($publicStorage);
-            } else {
-                $this->error('Public/storage is not a symbolic link.');
-                return;
-            }
+        if (File::exists($publicStorage)) {
+            File::deleteDirectory($publicStorage);
         }
 
         try {
-            symlink($appStorage, $publicStorage);
-            $this->info('The [public/storage] directory has been linked.');
+            File::copyDirectory($appStorage, $publicStorage);
+            $this->info('The [public/storage] directory has been copied (symlink disabled on server).');
         } catch (\Exception $e) {
-            $this->error('Failed to create symbolic link: ' . $e->getMessage());
+            $this->error('Failed: ' . $e->getMessage());
         }
     }
 }

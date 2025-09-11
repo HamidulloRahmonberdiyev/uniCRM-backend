@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Role;
 
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use Spatie\Permission\Models\Role;

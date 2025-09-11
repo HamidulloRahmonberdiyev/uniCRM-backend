@@ -7,7 +7,7 @@ use App\Repositories\Interfaces\OrderRepositoryInterface;
 use App\Repositories\Interfaces\RoleRepositoryInterface;
 use App\Repositories\Neighborhood\NeighborhoodRepository;
 use App\Repositories\Order\OrderRepository;
-use App\Repositories\RoleRepository;
+use App\Repositories\Role\RoleRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider

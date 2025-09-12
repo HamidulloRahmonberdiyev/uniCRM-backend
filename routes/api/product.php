@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
 
     Route::prefix('products')->group(function () {
         Route::get('/list', [ProductController::class, 'list']);

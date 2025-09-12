@@ -5,6 +5,7 @@ namespace App\Services\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthService
 {
@@ -34,9 +35,12 @@ class AuthService
 
     public function getAccessToken(User $user)
     {
+        $accessClaims = ['exp' => now()->addDay(1)->timestamp];
+        $refreshClaims = ['exp' => now()->addDays(180)->timestamp, 'type' => 'refresh'];
+
         return [
-            'access_token' => $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken,
-            'refresh_token' => $user->createToken('refresh-token', ['refresh'], now()->addDays(180))->plainTextToken
+            'access_token' => JWTAuth::claims($accessClaims)->fromUser($user),
+            'refresh_token' => JWTAuth::claims($refreshClaims)->fromUser($user),
         ];
     }
 }

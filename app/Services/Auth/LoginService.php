@@ -2,6 +2,7 @@
 
 namespace App\Services\Auth;
 
+use App\Helpers\Token\AuthTokenHelper;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Response;
@@ -27,7 +28,7 @@ class LoginService
 
     $this->clearRateLimit($phone);
 
-    $tokens = $this->authService->getAccessToken($user);
+    $tokens = AuthTokenHelper::createTokens($user);
 
     return [
       'access_token' => $tokens['access_token'],

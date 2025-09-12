@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\Settings\RoleController;
 use App\Http\Controllers\Api\Settings\SourceController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['auth:api'])->group(function () {
   Route::prefix('settings')->group(function () {
 
     Route::prefix('sources')->group(function () {

@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\CustomerController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['jwt_or_basic'])->group(function () {
 
   Route::prefix('customers')->group(function () {
     Route::get('find-phone', [CustomerController::class, 'findCustomerByPhone']);

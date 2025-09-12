@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\OrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:sanctum'])->group(function () {
+Route::middleware(['jwt_or_basic'])->group(function () {
 
   Route::prefix('orders')->group(function () {
     Route::get('stats', [OrderController::class, 'stats']);

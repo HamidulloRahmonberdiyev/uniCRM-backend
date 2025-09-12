@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Helpers\Token\AuthTokenHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RefreshTokenRequest;
@@ -13,8 +14,11 @@ use App\Traits\ApiJsonResponceTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 use Laravel\Sanctum\PersonalAccessToken;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\JWTException;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
+use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
+use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
@@ -32,12 +36,11 @@ class AuthController extends Controller
         try {
             $user = $this->authService->registerUser($request->validated());
 
-            $accessToken = $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
-            $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(365))->plainTextToken;
+            $tokens = AuthTokenHelper::createTokens($user);
 
             return response()->json([
-                'access_token' => $accessToken,
-                'refresh_token' => $refreshToken,
+                'access_token' => $tokens['access_token'],
+                'refresh_token' => $tokens['refresh_token'],
                 'token_type' => 'Bearer',
                 'expires_in' => config('sanctum.expiration'),
             ]);
@@ -54,12 +57,11 @@ class AuthController extends Controller
             return response()->json(['message' => 'Invalid credentials'], 401);
         }
 
-        $accessToken = $user->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
-        $refreshToken = $user->createToken('refresh-token', ['refresh'], now()->addDays(180))->plainTextToken;
+        $tokens = AuthTokenHelper::createTokens($user);
 
         return response()->json([
-            'access_token' => $accessToken,
-            'refresh_token' => $refreshToken,
+            'access_token' => $tokens['access_token'],
+            'refresh_token' => $tokens['refresh_token'],
             'user' => new UserResource($user),
             'token_type' => 'Bearer',
             'expires_in' => config('sanctum.expiration'),
@@ -68,21 +70,34 @@ class AuthController extends Controller
 
     public function refreshToken(RefreshTokenRequest $request)
     {
-        $token = PersonalAccessToken::findToken($request->refresh_token);
+        try {
+            $refreshToken = JWTAuth::setToken($request->refresh_token)->getToken();
 
-        if (!$token || !$token->can('refresh')) {
+            JWTAuth::setToken($refreshToken)->checkOrFail();
+
+            $user = JWTAuth::setToken($refreshToken)->authenticate();
+
+            if (!$user) {
+                return response()->json(['message' => 'Invalid refresh token'], 401);
+            }
+
+            JWTAuth::setToken($refreshToken)->invalidate();
+
+            $tokens = AuthTokenHelper::createTokens($user);
+
+            return response()->json([
+                'access_token' => $tokens['access_token'],
+                'refresh_token' => $tokens['refresh_token'],
+                'token_type' => 'Bearer',
+                'expires_in' => config('jwt.ttl') * 60,
+            ]);
+        } catch (TokenExpiredException $e) {
+            return response()->json(['message' => 'Refresh token expired'], 401);
+        } catch (TokenInvalidException $e) {
             return response()->json(['message' => 'Invalid refresh token'], 401);
+        } catch (JWTException $e) {
+            return response()->json(['message' => 'Token error'], 500);
         }
-
-        $token->tokenable->tokens()->where('name', 'access-token')->delete();
-
-        $accessToken = $token->tokenable->createToken('access-token', ['*'], now()->addDays(7))->plainTextToken;
-
-        return response()->json([
-            'access_token' => $accessToken,
-            'token_type' => 'Bearer',
-            'expires_in' => config('sanctum.expiration'),
-        ]);
     }
 
     public function logout(Request $request)

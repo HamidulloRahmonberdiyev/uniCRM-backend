@@ -11,7 +11,7 @@ class ImageService
   public function uploadImage(UploadedFile $image, string $folder): string
   {
     $filename = Str::random(40) . '.' . $image->getClientOriginalExtension();
-    $path = $image->storeAs("public/{$folder}", $filename);
+    $path = $image->storeAs("{$folder}", $filename);
     return str_replace('public/', 'storage/', $path);
   }
 

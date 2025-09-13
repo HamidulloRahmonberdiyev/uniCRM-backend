@@ -13,7 +13,7 @@ class ProductResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'price' => formatPrice($this->price),
-            'image' => $this->image,
+            'image' => ($this->image ? 'storage/' . $this->image : null),
             'status' => $this->status,
         ];
     }

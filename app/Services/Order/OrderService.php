@@ -4,6 +4,7 @@ namespace App\Services\Order;
 
 use App\Enums\OrderStatusEnum;
 use App\Models\Order;
+use App\Models\Product;
 use App\Repositories\Interfaces\NeighborhoodRepositoryInterface;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
 use Carbon\Carbon;
@@ -64,7 +65,7 @@ class OrderService
             'status' => $data['status'] ?? Order::ACTIVE,
             'source_id' => $data['source_id'] ?? 1,
             'supplier_id' => $data['supplier_id'] ?? null,
-            'product_id' => $data['product_id'] ?? null,
+            'product_id' => $data['product_id'] ?? Product::active()->first()->id,
         ];
     }
 

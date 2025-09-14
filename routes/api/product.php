@@ -3,7 +3,7 @@
 use App\Http\Controllers\Api\Product\ProductController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['jwt_or_basic'])->group(function () {
 
     Route::prefix('products')->group(function () {
         Route::get('/list', [ProductController::class, 'list']);

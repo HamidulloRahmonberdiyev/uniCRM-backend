@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\ReturnedController;
 use App\Http\Controllers\Api\StatsController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth:api'])->group(function () {
+Route::middleware(['jwt_or_basic'])->group(function () {
 
     Route::prefix('dashboard')->group(function () {
         Route::get('stats', [DashboardController::class, 'stats']);

@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'sms' => [
+        'eskiz' => [
+            'base_url' => env('ESKIZ_BASE_URL', 'https://notify.eskiz.uz/api')
+        ]
+    ]
+
 ];

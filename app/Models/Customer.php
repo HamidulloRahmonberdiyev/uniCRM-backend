@@ -67,4 +67,9 @@ class Customer extends Model
     {
         return $query->where('status', self::ACTIVE);
     }
+
+    public function getFullNameAttribute(): string
+    {
+        return trim("{$this->last_name} {$this->first_name} {$this->middle_name}");
+    }
 }

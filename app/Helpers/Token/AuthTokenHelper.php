@@ -6,7 +6,7 @@ use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 
 class AuthTokenHelper
 {
-    public static function createTokens($user, $accessDays = 1, $refreshDays = 90)
+    public static function createTokens($user, $accessDays = 60, $refreshDays = 90)
     {
         $accessToken = JWTAuth::claims([
             'exp' => now()->addDays($accessDays)->timestamp,

@@ -49,3 +49,4 @@ require_once 'api/supplier.php';
 require_once 'api/order.php';
 require_once 'api/customer.php';
 require_once 'api/settings.php';
+require_once 'api/sms.php';

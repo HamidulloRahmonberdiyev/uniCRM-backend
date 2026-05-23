@@ -126,6 +126,29 @@ if (!function_exists('formatPhone')) {
         );
     }
 
+    if (! function_exists('formatPhoneSms')) {
+        /**
+         * Telefon raqamni Eskiz API uchun to'g'ri formatga keltiradi.
+         *
+         * @param string $phone
+         * @return string
+         */
+        function formatPhoneSms(string $phone): string
+        {
+            $phone = preg_replace('/[^0-9]/', '', $phone);
+
+            if (strlen($phone) === 9) {
+                return '998' . $phone;
+            }
+
+            if (strlen($phone) === 12 && str_starts_with($phone, '998')) {
+                return $phone;
+            }
+
+            return $phone;
+        }
+    }
+
     if (!function_exists('extractNameAndPhone')) {
         /**
          * Berilgan matndan ism va telefon raqamini ajratib oladi.
@@ -156,6 +179,23 @@ if (!function_exists('formatPhone')) {
         function formatPrice($amount, $decimals = 0, $thousands_sep = ' ', $decimal_point = '.')
         {
             return number_format($amount, $decimals, $decimal_point, $thousands_sep);
+        }
+    }
+
+    if (! function_exists('parseSmsTemplate')) {
+        /**
+         * SMS template matnidagi &tag& o‘rniga real qiymatlarni qo‘yadi.
+         *
+         * @param string $template
+         * @param array $data
+         * @return string
+         */
+        function parseSmsTemplate(string $template, array $data): string
+        {
+            return preg_replace_callback('/&(\w+)&/', function ($matches) use ($data) {
+                $key = strtolower($matches[1]);
+                return $data[$key] ?? $matches[0];
+            }, $template);
         }
     }
 }

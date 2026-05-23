@@ -20,7 +20,7 @@ class LoginService
   {
     $phone = sanitizePhone($phone);
 
-    $this->checkRateLimit($phone);
+    // $this->checkRateLimit($phone);
 
     $user = $this->findActiveUser($phone);
 

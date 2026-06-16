@@ -85,6 +85,8 @@ class OrderService
                 'customer_id' => $customer->id,
                 'address' => $data['address'],
                 'quantity' => $data['quantity'],
+                'product_id' => $data['product_id'],
+                'sum' => $data['price'],
             ]);
         });
     }

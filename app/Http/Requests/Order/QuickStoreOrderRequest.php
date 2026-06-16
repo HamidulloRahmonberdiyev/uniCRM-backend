@@ -28,6 +28,8 @@ class QuickStoreOrderRequest extends FormRequest
             'first_name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'quantity' => 'required|integer|min:1',
+            'product_id' => 'required|integer|exists:products,id',
+            'price' => 'required|numeric|min:0',
         ];
     }
 
@@ -46,6 +48,13 @@ class QuickStoreOrderRequest extends FormRequest
             'quantity.required' => 'Miqdor kiritish majburiy.',
             'quantity.integer' => 'Miqdor son bo\'lishi kerak.',
             'quantity.min' => 'Miqdor kamida 1 bo\'lishi kerak.',
+
+            'product_id.required' => 'Mahsulotni tanlash majburiy.',
+            'product_id.exists' => 'Berilgan mahsulot mavjud emas.',
+
+            'price.required' => 'Narx kiritish majburiy.',
+            'price.numeric' => 'Narx raqam bo\'lishi kerak.',
+            'price.min' => 'Narx manfiy bo\'lishi mumkin emas.',
         ];
     }
 

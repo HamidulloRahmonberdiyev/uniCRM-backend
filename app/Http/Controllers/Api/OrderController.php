@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Order\ChangeOrderActionRequest;
+use App\Http\Requests\Order\FilterLocatedOrderRequest;
 use App\Http\Requests\Order\FilterOrderRequest;
+use App\Http\Requests\Order\QuickStoreOrderRequest;
 use App\Http\Requests\Order\StoreOrderRequest;
 use App\Http\Requests\Order\UpdateOrderRequest;
 use App\Http\Resources\OrderResource;
@@ -32,10 +34,24 @@ class OrderController extends Controller
         return OrderResource::collection($orders);
     }
 
+    public function located(FilterLocatedOrderRequest $request)
+    {
+        $orders = $this->orderService->getOrdersWithCoordinates($request->validated());
+
+        return $this->successResponse(OrderResource::collection($orders));
+    }
+
     public function store(StoreOrderRequest $request)
     {
         $order = $this->orderService->createOrder($request->validated());
         return new OrderResource($order);
+    }
+
+    public function quickStore(QuickStoreOrderRequest $request)
+    {
+        $order = $this->orderService->createQuickOrder($request->validated());
+
+        return $this->successResponse(new OrderResource($order), 'Order created successfully', 201);
     }
 
     public function show(Order $order)

@@ -237,20 +237,30 @@ class CustomerService
             ->get();
     }
 
-    public function findCustomerByPhoneOrFail(string $phone): ?Customer
+    public function findByPhone(string $phone): ?Customer
     {
-        $sanitizedPhone = sanitizePhone($phone);
+        $phone = sanitizePhone($phone);
 
-        $customer = Customer::query()
-            ->where(function ($query) use ($sanitizedPhone) {
-                $query->where('phone', $sanitizedPhone)
-                    ->orWhere('phone2', $sanitizedPhone);
-            })->first();
+        return Customer::query()
+            ->where(fn ($query) => $query
+                ->where('phone', $phone)
+                ->orWhere('phone2', $phone))
+            ->first();
+    }
 
-        if (!$customer) {
-            throw new CustomerNotFoundException();
-        }
+    public function createForOrder(array $data): Customer
+    {
+        return Customer::create([
+            'user_id' => Auth::id(),
+            'company_id' => 1,
+            'first_name' => $data['first_name'],
+            'phone' => sanitizePhone($data['phone']),
+            'status' => Customer::ACTIVE,
+        ]);
+    }
 
-        return $customer;
+    public function findCustomerByPhoneOrFail(string $phone): Customer
+    {
+        return $this->findByPhone($phone) ?? throw new CustomerNotFoundException();
     }
 }

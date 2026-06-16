@@ -7,15 +7,18 @@ use App\Models\Order;
 use App\Models\Product;
 use App\Repositories\Interfaces\NeighborhoodRepositoryInterface;
 use App\Repositories\Interfaces\OrderRepositoryInterface;
+use App\Services\Customer\CustomerService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class OrderService
 {
     public function __construct(
         private OrderRepositoryInterface $orderRepository,
-        private NeighborhoodRepositoryInterface $neighborhoodRepository
+        private NeighborhoodRepositoryInterface $neighborhoodRepository,
+        private CustomerService $customerService,
     ) {}
 
     public function getAllOrders(array $data)
@@ -35,6 +38,31 @@ class OrderService
         return $query->orderByDesc('created_at')->paginate(20);
     }
 
+    public function getOrdersWithCoordinates(array $data)
+    {
+        $query = Order::query()
+            ->whereNotNull('latitude')
+            ->whereNotNull('longitude');
+
+        if (isset($data['supplier_id'])) {
+            $query->where('supplier_id', $data['supplier_id']);
+        }
+
+        if (isset($data['status'])) {
+            $query->where('status', $data['status']);
+        }
+
+        return $query->with([
+                'customer:id,first_name,last_name,middle_name,phone,phone2',
+                'district:id,name',
+                'neighborhood:id,name',
+                'source:id,name',
+            ])
+            ->orderByDesc('created_at')
+            ->limit($data['limit'])
+            ->get();
+    }
+
     public function createOrder(array $data): Order
     {
         if (!empty($data['neighborhood_id'])) {
@@ -45,6 +73,20 @@ class OrderService
         $orderData = $this->prepareOrderCreateData($data);
 
         return $this->orderRepository->create($orderData);
+    }
+
+    public function createQuickOrder(array $data): Order
+    {
+        return DB::transaction(function () use ($data) {
+            $customer = $this->customerService->findByPhone($data['phone'])
+                ?? $this->customerService->createForOrder($data);
+
+            return $this->createOrder([
+                'customer_id' => $customer->id,
+                'address' => $data['address'],
+                'quantity' => $data['quantity'],
+            ]);
+        });
     }
 
     private function prepareOrderCreateData(array $data): array
